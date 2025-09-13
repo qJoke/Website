@@ -295,20 +295,10 @@ h2 {
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    text-align: left;
     overflow: hidden;
-}
-
-.hero-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-    z-index: -2;
+    background: url('background.png') no-repeat center center/cover;
 }
 
 .hero-overlay {
@@ -317,22 +307,139 @@ h2 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(10, 10, 26, 0.7);
-    z-index: -1;
+    background-color: rgba(10, 10, 26, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 5%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+
+.hero-text {
+    position: relative;
+    max-width: 650px;
+    padding-bottom: 100px; /* Add more padding to avoid overlap with badge */
+}
+
+.hero-text .subtitle {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.hero-text .subtitle::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #d9232d;
+    border-radius: 50%;
+    border: 2px solid #fff;
 }
 
 .main-headline {
-    font-size: 4rem;
-    margin-bottom: 20px;
+    font-size: 3.5rem;
+    margin: 0;
     font-weight: 700;
-    animation: fadeIn 1s ease-out forwards;
+    line-height: 1.2;
 }
 
-.sub-headline {
+.btn-pachete {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 35px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-pachete:hover {
+    background-color: #fff;
+    color: #0a0a1a;
+}
+
+.hero-price-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 180px;
+    background-color: #d9232d;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 50% 50% 50% 5% / 50% 50% 50% 50%;
+    transform: rotate(-15deg);
+    text-align: center;
+    z-index: 3;
+}
+
+.hero-price-badge::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid #d9232d;
+}
+
+.hero-price-badge p {
+    margin: 0;
+    font-weight: 600;
+}
+
+.hero-price-badge .price {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.play-button-container {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+    z-index: 3;
+}
+
+.play-button-outer-circle {
+    width: 120px;
+    height: 120px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.play-button-inner-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.play-button-inner-circle i {
+    color: #d9232d;
     font-size: 1.5rem;
-    font-weight: 300;
-    animation: slideUp 1s ease-out 0.5s forwards;
-    opacity: 0;
+    padding-left: 5px;
 }
 
 @keyframes fadeIn {
@@ -965,4 +1072,40 @@ h2 {
     width: 45px;
     height: 45px;
     border-color: #d9232d; /* Red */
+}
+
+/* Fixed Social Icons */
+.social-icons-fixed {
+    position: fixed !important;
+    top: 50%;
+    left: 30px;
+    margin-top: -87px; /* Vertically center without transform */
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.social-icons-fixed a {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-icons-fixed a:hover {
+    background-color: #fff;
+    color: #0a0a1a;
+    transform: scale(1.1);
+}
+
+.social-icons-fixed a i {
+    font-size: 1rem;
 }
