@@ -57,6 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const answer = question.nextElementSibling;
             if (question.classList.contains('active')) {
                 answer.style.maxHeight = answer.scrollHeight + 'px';
+                setTimeout(() => {
+                    question.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300); // Delay to allow the accordion to open
             } else {
                 answer.style.maxHeight = 0;
             }
