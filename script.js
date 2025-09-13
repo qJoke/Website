@@ -12,21 +12,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     toggleButtons.forEach(button => {
         button.addEventListener('click', () => {
+            if (button.classList.contains('active')) return;
+
             // Update active button state
             toggleButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
             // Get the plan to show
             const planToShow = button.getAttribute('data-plan');
+            const gridToShow = document.getElementById(`${planToShow}-plans`);
+            const currentGrid = document.querySelector('.pricing-grid.active');
 
-            // Show the selected plan and hide the other
-            pricingGrids.forEach(grid => {
-                if (grid.id === `${planToShow}-plans`) {
-                    grid.classList.add('active');
-                } else {
-                    grid.classList.remove('active');
+            if (currentGrid) {
+                currentGrid.classList.remove('active');
+            }
+            
+            setTimeout(() => {
+                pricingGrids.forEach(grid => {
+                    grid.style.display = 'none';
+                });
+                
+                if (gridToShow) {
+                    gridToShow.style.display = 'grid';
+                    setTimeout(() => {
+                        gridToShow.classList.add('active');
+                    }, 50);
                 }
-            });
+            }, 500);
         });
     });
 
@@ -130,4 +142,31 @@ document.addEventListener('DOMContentLoaded', function() {
             overlay.classList.remove('active');
         });
     }
+
+    // Custom Cursor Functionality
+    const cursorDot = document.querySelector('.cursor-dot');
+    const cursorOutline = document.querySelector('.cursor-outline');
+
+    window.addEventListener('mousemove', function(e) {
+        const posX = e.clientX;
+        const posY = e.clientY;
+
+        cursorDot.style.left = `${posX}px`;
+        cursorDot.style.top = `${posY}px`;
+
+        cursorOutline.animate({
+            left: `${posX}px`,
+            top: `${posY}px`
+        }, { duration: 500, fill: 'forwards' });
+    });
+
+    const links = document.querySelectorAll('a, button');
+    links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+            cursorOutline.classList.add('hover');
+        });
+        link.addEventListener('mouseleave', () => {
+            cursorOutline.classList.remove('hover');
+        });
+    });
 });
