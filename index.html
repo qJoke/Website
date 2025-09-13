@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
@@ -14,16 +15,43 @@
         <div class="container">
             <a href="#" class="logo">Pixel Magix</a>
             <nav>
-                <ul>
+                <ul class="nav-links">
                     <li><a href="#hero">Acasă</a></li>
                     <li><a href="#pricing">Abonamente</a></li>
                     <li><a href="#faq">Întrebări Frecvente</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
-            <a href="https://wa.me/972555171043" class="btn-contact">CONTACT</a>
+            <div class="nav-buttons">
+                <button class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <a href="https://wa.me/972555171043" class="btn-contact">CONTACT &#8250;</a>
+            </div>
         </div>
     </header>
+
+    <div class="sidebar">
+        <button class="close-btn">&times;</button>
+        <div class="sidebar-content">
+            <h3 class="sidebar-title">Pixel Magix</h3>
+            <p class="sidebar-description">Cu Pixel Magix, distanța nu va mai fi o problemă, indiferent unde te afli pe glob. Îți aducem aproape sentimentul de acasă prin serviciile noastre IPTV de înaltă calitate. Vei avea mereu o parte din casă cu tine, oriunde ai fi.</p>
+            <div class="sidebar-contact">
+                <h4>Contact:</h4>
+                <p><i class="fas fa-clock"></i> Luni - Vineri: 9.00 am. - 22.00 pm.</p>
+                <p><i class="fas fa-phone"></i> <a href="tel:+972555171043">+972 555 171 043</a></p>
+            </div>
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="overlay"></div>
 
     <main>
         <section id="hero" class="hero-section">
@@ -162,7 +190,7 @@
         <div class="container">
             <div class="footer-content">
                 <h3>Pixel Magix</h3>
-                <p>WhatsApp: +972555171043</p>
+                <p>WhatsApp: <a href="tel:+972555171043">+972 555 171 043</a></p>
                 <div class="compatibility">
                     <p>Compatibil cu:</p>
                     <div class="logos">
@@ -175,6 +203,23 @@
             </div>
         </div>
     </footer>
+
+    <div class="whatsapp-bubble" id="whatsapp-bubble">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </div>
+
+    <div class="whatsapp-chat-window" id="whatsapp-chat-window">
+        <div class="chat-header">
+            <span>WhatsApp Chat</span>
+            <button class="close-btn" id="close-chat-btn">&times;</button>
+        </div>
+        <div class="chat-body">
+            <textarea id="whatsapp-message" placeholder="Scrie mesajul tau aici..."></textarea>
+        </div>
+        <div class="chat-footer">
+            <button id="send-whatsapp-message">Trimite</button>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="script.js"></script>

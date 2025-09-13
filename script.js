@@ -72,4 +72,62 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // WhatsApp Chat Bubble Functionality
+    const whatsappBubble = document.getElementById('whatsapp-bubble');
+    const whatsappChatWindow = document.getElementById('whatsapp-chat-window');
+    const closeChatBtn = document.getElementById('close-chat-btn');
+    const sendMessageBtn = document.getElementById('send-whatsapp-message');
+    const messageTextarea = document.getElementById('whatsapp-message');
+
+    if (whatsappBubble) {
+        whatsappBubble.addEventListener('click', () => {
+            whatsappChatWindow.style.display = 'flex';
+        });
+    }
+
+    if (closeChatBtn) {
+        closeChatBtn.addEventListener('click', () => {
+            whatsappChatWindow.style.display = 'none';
+        });
+    }
+
+    if (sendMessageBtn) {
+        sendMessageBtn.addEventListener('click', () => {
+            const message = messageTextarea.value;
+            if (message.trim() !== '') {
+                const whatsappUrl = `https://wa.me/972555171043?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                messageTextarea.value = '';
+                whatsappChatWindow.style.display = 'none';
+            }
+        });
+    }
+
+    // Sidebar Functionality
+    const hamburger = document.querySelector('.hamburger');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+    const closeBtn = document.querySelector('.sidebar .close-btn');
+
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+    }
 });
