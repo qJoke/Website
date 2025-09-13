@@ -169,4 +169,31 @@ document.addEventListener('DOMContentLoaded', function() {
             cursorOutline.classList.remove('hover');
         });
     });
+
+    // Navbar scroll animation
+    const navbar = document.querySelector('.navbar');
+    let lastScrollTop = 0;
+    const scrollThreshold = 50; // Pixels to scroll before changing navbar style
+
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Add/remove navbar-scrolled class
+        if (scrollTop > scrollThreshold) {
+            navbar.classList.add('navbar-scrolled');
+        } else {
+            navbar.classList.remove('navbar-scrolled');
+        }
+
+        // Hide/show navbar logic
+        if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+            // Scroll Down
+            navbar.classList.add('hidden');
+        } else {
+            // Scroll Up
+            navbar.classList.remove('hidden');
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+    });
 });

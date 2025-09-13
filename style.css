@@ -35,6 +35,17 @@ h2 {
     z-index: 1000;
     padding: 0;
     background: transparent;
+    transition: top 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.navbar.navbar-scrolled {
+    top: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar.hidden {
+    top: -100px;
 }
 
 .navbar .container {
@@ -47,6 +58,14 @@ h2 {
     margin: 0 auto;
     max-width: 90%; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: max-width 0.4s ease, border-radius 0.4s ease, background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.navbar.navbar-scrolled .container {
+    max-width: 1200px;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .logo {
