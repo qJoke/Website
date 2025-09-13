@@ -174,6 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.querySelector('.navbar');
     let lastScrollTop = 0;
     const scrollThreshold = 50; // Pixels to scroll before changing navbar style
+    let allowHide = true;
+    let scrollEndTimeout;
 
     window.addEventListener('scroll', function() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -186,15 +188,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Hide/show navbar logic
-        if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
-            // Scroll Down
-            navbar.classList.add('hidden');
-        } else {
-            // Scroll Up
-            navbar.classList.remove('hidden');
+        if (allowHide) {
+            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                // Scroll Down
+                navbar.classList.add('hidden');
+            } else {
+                // Scroll Up
+                navbar.classList.remove('hidden');
+            }
         }
         
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+
+        // Detect when scrolling has stopped
+        clearTimeout(scrollEndTimeout);
+        scrollEndTimeout = setTimeout(() => {
+            allowHide = true;
+        }, 150); // After 150ms of no scrolling, re-enable hiding
     });
 
     // Smooth scrolling for navigation links
@@ -203,6 +213,11 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
+            
+            // Prevent navbar from hiding during programmatic scroll
+            allowHide = false;
+            navbar.classList.remove('hidden');
+
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
 
