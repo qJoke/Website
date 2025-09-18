@@ -1,12 +1,14 @@
-document.addEventListener('DOMContentLoaded', function() {
+﻿
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.AOS) {
+        AOS.init({
+            duration: 900,
+            once: true,
+            offset: 60
+        });
+    }
 
-    // Initialize AOS (Animate on Scroll)
-    AOS.init({
-        duration: 1000, // Animation duration
-        once: true,     // Whether animation should happen only once
-    });
-
-    // Pricing Toggle Functionality
+    // Pricing toggle functionality
     const toggleButtons = document.querySelectorAll('.toggle-btn');
     const pricingGrids = document.querySelectorAll('.pricing-grid');
 
@@ -14,221 +16,261 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', () => {
             if (button.classList.contains('active')) return;
 
-            // Update active button state
             toggleButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            // Get the plan to show
-            const planToShow = button.getAttribute('data-plan');
-            const gridToShow = document.getElementById(`${planToShow}-plans`);
-            const currentGrid = document.querySelector('.pricing-grid.active');
+            const plan = button.getAttribute('data-plan');
+            const targetGrid = document.getElementById(`${plan}-plans`);
 
-            if (currentGrid) {
-                currentGrid.classList.remove('active');
-            }
-            
-            setTimeout(() => {
-                pricingGrids.forEach(grid => {
-                    grid.style.display = 'none';
-                });
-                
-                if (gridToShow) {
-                    gridToShow.style.display = 'grid';
-                    setTimeout(() => {
-                        gridToShow.classList.add('active');
-                    }, 50);
+            pricingGrids.forEach(grid => {
+                if (grid === targetGrid) {
+                    grid.classList.add('active');
+                } else {
+                    grid.classList.remove('active');
                 }
-            }, 500);
+            });
         });
     });
 
-    // FAQ Accordion Functionality
+    // FAQ accordion functionality
     const faqQuestions = document.querySelectorAll('.faq-question');
 
     faqQuestions.forEach(question => {
         question.addEventListener('click', () => {
-            const currentlyActive = document.querySelector('.faq-question.active');
-            if (currentlyActive && currentlyActive !== question) {
-                currentlyActive.classList.remove('active');
-                currentlyActive.nextElementSibling.style.maxHeight = 0;
+            const activeQuestion = document.querySelector('.faq-question.active');
+            if (activeQuestion && activeQuestion !== question) {
+                activeQuestion.classList.remove('active');
+                const activeAnswer = activeQuestion.nextElementSibling;
+                if (activeAnswer) {
+                    activeAnswer.style.maxHeight = null;
+                }
             }
 
             question.classList.toggle('active');
             const answer = question.nextElementSibling;
+
             if (question.classList.contains('active')) {
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                setTimeout(() => {
-                    question.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300); // Delay to allow the accordion to open
-            } else {
-                answer.style.maxHeight = 0;
+                if (answer) {
+                    answer.style.maxHeight = `${answer.scrollHeight}px`;
+                }
+            } else if (answer) {
+                answer.style.maxHeight = null;
             }
         });
     });
 
-    // Infinite Scroller for Movie Showcase
-    const scrollers = document.querySelectorAll(".scroller");
+    // Animated counters for stats section
+    const statCards = document.querySelectorAll('.stat-card');
+    const observerOptions = {
+        threshold: 0.35
+    };
 
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        addAnimation();
+    const animateCounter = (entry) => {
+        const element = entry.target;
+        const targetValue = parseInt(element.dataset.target || '0', 10);
+        const valueElement = element.querySelector('.stat-value');
+        if (!valueElement) return;
+
+        let current = 0;
+        const duration = 1800;
+        const stepTime = 20;
+        const step = Math.max(Math.floor((targetValue * stepTime) / duration), 1);
+
+        const counterInterval = setInterval(() => {
+            current += step;
+            if (current >= targetValue) {
+                valueElement.textContent = targetValue.toLocaleString('ro-RO');
+                clearInterval(counterInterval);
+            } else {
+                valueElement.textContent = current.toLocaleString('ro-RO');
+            }
+        }, stepTime);
+    };
+
+    if ('IntersectionObserver' in window) {
+        const statObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        statCards.forEach(card => statObserver.observe(card));
+    } else {
+        statCards.forEach(card => animateCounter({ target: card }));
     }
 
-    function addAnimation() {
-        scrollers.forEach((scroller) => {
-            scroller.setAttribute("data-animated", true);
+    // Testimonials slider
+    const sliderTrack = document.querySelector('.testimonials-track');
+    const prevButton = document.querySelector('.slider-btn--prev');
+    const nextButton = document.querySelector('.slider-btn--next');
 
-            const scrollerInner = scroller.querySelector(".scroller__inner");
-            const scrollerContent = Array.from(scrollerInner.children);
+    if (sliderTrack) {
+        const slides = Array.from(sliderTrack.children);
+        let currentIndex = 0;
 
-            scrollerContent.forEach((item) => {
-                const duplicatedItem = item.cloneNode(true);
-                duplicatedItem.setAttribute("aria-hidden", true);
-                scrollerInner.appendChild(duplicatedItem);
+        const updateSlider = () => {
+            const slideWidth = slides[0]?.getBoundingClientRect().width || 0;
+            sliderTrack.style.transform = `translateX(-${currentIndex * (slideWidth + 24)}px)`;
+        };
+
+        const goToSlide = (index) => {
+            if (slides.length === 0) return;
+            currentIndex = (index + slides.length) % slides.length;
+            updateSlider();
+        };
+
+        prevButton?.addEventListener('click', () => goToSlide(currentIndex - 1));
+        nextButton?.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+        window.addEventListener('resize', () => {
+            sliderTrack.style.transition = 'none';
+            updateSlider();
+            requestAnimationFrame(() => {
+                sliderTrack.style.transition = '';
             });
         });
     }
 
-    // WhatsApp Chat Bubble Functionality
+    // WhatsApp chat interactions
     const whatsappBubble = document.getElementById('whatsapp-bubble');
-    const whatsappChatWindow = document.getElementById('whatsapp-chat-window');
+    const whatsappWindow = document.getElementById('whatsapp-chat-window');
     const closeChatBtn = document.getElementById('close-chat-btn');
     const sendMessageBtn = document.getElementById('send-whatsapp-message');
-    const messageTextarea = document.getElementById('whatsapp-message');
+    const whatsappTextarea = document.getElementById('whatsapp-message');
 
-    if (whatsappBubble) {
-        whatsappBubble.addEventListener('click', () => {
-            whatsappChatWindow.style.display = 'flex';
-        });
-    }
+    whatsappBubble?.addEventListener('click', () => {
+        if (whatsappWindow) {
+            whatsappWindow.style.display = 'flex';
+            whatsappWindow.setAttribute('aria-hidden', 'false');
+        }
+    });
 
-    if (closeChatBtn) {
-        closeChatBtn.addEventListener('click', () => {
-            whatsappChatWindow.style.display = 'none';
-        });
-    }
+    closeChatBtn?.addEventListener('click', () => {
+        if (whatsappWindow) {
+            whatsappWindow.style.display = 'none';
+            whatsappWindow.setAttribute('aria-hidden', 'true');
+        }
+    });
 
-    if (sendMessageBtn) {
-        sendMessageBtn.addEventListener('click', () => {
-            const message = messageTextarea.value;
-            if (message.trim() !== '') {
-                const whatsappUrl = `https://wa.me/972555171043?text=${encodeURIComponent(message)}`;
-                window.open(whatsappUrl, '_blank');
-                messageTextarea.value = '';
-                whatsappChatWindow.style.display = 'none';
-            }
-        });
-    }
+    sendMessageBtn?.addEventListener('click', () => {
+        if (!whatsappTextarea) return;
+        const message = whatsappTextarea.value.trim();
+        if (message.length === 0) return;
+        const url = `https://wa.me/972555171043?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+        whatsappTextarea.value = '';
+        whatsappWindow?.setAttribute('aria-hidden', 'true');
+        if (whatsappWindow) {
+            whatsappWindow.style.display = 'none';
+        }
+    });
 
-    // Sidebar Functionality
+    // Sidebar functionality
     const hamburger = document.querySelector('.hamburger');
     const sidebar = document.querySelector('.sidebar');
     const overlay = document.querySelector('.overlay');
-    const closeBtn = document.querySelector('.sidebar .close-btn');
 
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.classList.add('active');
-        });
-    }
+    const openSidebar = () => {
+        sidebar?.classList.add('active');
+        overlay?.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
 
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        });
-    }
+    const closeSidebar = () => {
+        sidebar?.classList.remove('active');
+        overlay?.classList.remove('active');
+        document.body.style.overflow = '';
+    };
 
-    if (overlay) {
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        });
-    }
+    hamburger?.addEventListener('click', openSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+    sidebar?.querySelector('.close-btn')?.addEventListener('click', closeSidebar);
 
-    // Custom Cursor Functionality
+    const mobileLinks = sidebar?.querySelectorAll('a[href^="#"]');
+    mobileLinks?.forEach(link => {
+        link.addEventListener('click', closeSidebar);
+    });
+
+    // Custom cursor functionality
     const cursorDot = document.querySelector('.cursor-dot');
     const cursorOutline = document.querySelector('.cursor-outline');
 
-    window.addEventListener('mousemove', function(e) {
-        const posX = e.clientX;
-        const posY = e.clientY;
-
-        cursorDot.style.left = `${posX}px`;
-        cursorDot.style.top = `${posY}px`;
-
-        cursorOutline.animate({
-            left: `${posX}px`,
-            top: `${posY}px`
-        }, { duration: 500, fill: 'forwards' });
-    });
-
-    const links = document.querySelectorAll('a, button');
-    links.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            cursorOutline.classList.add('hover');
+    if (cursorDot && cursorOutline) {
+        window.addEventListener('mousemove', (event) => {
+            const { clientX, clientY } = event;
+            cursorDot.style.transform = `translate(${clientX}px, ${clientY}px)`;
+            cursorOutline.animate({
+                transform: `translate(${clientX}px, ${clientY}px)`
+            }, { duration: 350, fill: 'forwards' });
         });
-        link.addEventListener('mouseleave', () => {
-            cursorOutline.classList.remove('hover');
-        });
-    });
 
-    // Navbar scroll animation
+        const interactiveElements = document.querySelectorAll('a, button, input, textarea');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
+        });
+    }
+
+    // Navbar scroll behaviour
     const navbar = document.querySelector('.navbar');
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
     let lastScrollTop = 0;
-    const scrollThreshold = 50; // Pixels to scroll before changing navbar style
-    let allowHide = true;
-    let scrollEndTimeout;
 
-    window.addEventListener('scroll', function() {
-        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        // Add/remove navbar-scrolled class
-        if (scrollTop > scrollThreshold) {
-            navbar.classList.add('navbar-scrolled');
-        } else {
-            navbar.classList.remove('navbar-scrolled');
-        }
+        if (navbar) {
+            if (scrollTop > 60) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
 
-        // Hide/show navbar logic
-        if (allowHide) {
-            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
-                // Scroll Down
+            if (scrollTop > lastScrollTop && scrollTop > 120) {
                 navbar.classList.add('hidden');
             } else {
-                // Scroll Up
                 navbar.classList.remove('hidden');
             }
         }
-        
-        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 
-        // Detect when scrolling has stopped
-        clearTimeout(scrollEndTimeout);
-        scrollEndTimeout = setTimeout(() => {
-            allowHide = true;
-        }, 150); // After 150ms of no scrolling, re-enable hiding
+        if (scrollToTopBtn) {
+            if (scrollTop > 480) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        }
+
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
     });
 
-    // Smooth scrolling for navigation links
+    scrollToTopBtn?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Smooth scroll for anchor links
     const navLinks = document.querySelectorAll('a[href^="#"]');
-
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Prevent navbar from hiding during programmatic scroll
-            allowHide = false;
-            navbar.classList.remove('hidden');
-
-            const targetId = this.getAttribute('href');
+        link.addEventListener('click', (event) => {
+            const targetId = link.getAttribute('href');
+            if (!targetId || targetId === '#') return;
             const targetElement = document.querySelector(targetId);
+            if (!targetElement) return;
 
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
+            event.preventDefault();
+            targetElement.scrollIntoView({ behavior: 'smooth' });
         });
     });
+
+    // Set current year in footer
+    const currentYear = document.getElementById('current-year');
+    if (currentYear) {
+        currentYear.textContent = new Date().getFullYear().toString();
+    }
 });
+
+
+

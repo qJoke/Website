@@ -1,11 +1,13 @@
+﻿
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Magix - Poarta Ta Către Divertisment!</title>
+    <title>Pixel Magix TV – Poarta ta către divertisment</title>
+    <meta name="description" content="Pixel Magix TV aduce cele mai îndrăgite canale, filme și seriale direct la tine, oriunde în lume. Descoperă abonamente flexibile, suport rapid și soluții IPTV premium.">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,372 +15,561 @@
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
+    <header class="top-bar">
+        <div class="container top-bar__content">
+            <span><i class="fas fa-map-marker-alt"></i> IPTV premium pentru diaspora românească</span>
+            <span><i class="fas fa-phone"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">+972 555 171 043</a></span>
+            <span><i class="fab fa-whatsapp"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">Scrie-ne pe WhatsApp</a></span>
+        </div>
+    </header>
+
     <header class="navbar">
-        <div class="container">
-            <a href="#" class="logo">Pixel Magix</a>
-            <nav>
+        <div class="container navbar__container">
+            <a href="#hero" class="logo">Pixel Magix</a>
+            <nav class="main-nav">
                 <ul class="nav-links">
                     <li><a href="#hero">Acasă</a></li>
-                    <li><a href="#pricing">Abonamente</a></li>
-                    <li><a href="#faq">Întrebări Frecvente</a></li>
+                    <li><a href="#servicii">Servicii</a></li>
+                    <li><a href="#abonamente">Abonamente</a></li>
+                    <li><a href="#testimoniale">Testimoniale</a></li>
+                    <li><a href="#faq">Întrebări frecvente</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
             <div class="nav-buttons">
-                <button class="hamburger">
+                <a href="https://wa.me/972555171043" class="btn btn--primary">Începe acum</a>
+                <button class="hamburger" aria-label="Deschide meniul">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
-                <a href="https://wa.me/972555171043" class="btn-contact">CONTACT &#8250;</a>
             </div>
         </div>
     </header>
 
     <div class="sidebar">
-        <button class="close-btn">&times;</button>
+        <button class="close-btn" aria-label="Închide meniul">&times;</button>
         <div class="sidebar-content">
             <h3 class="sidebar-title">Pixel Magix</h3>
-            <p class="sidebar-description">Cu Pixel Magix, distanța nu va mai fi o problemă, indiferent unde te afli pe glob. Îți aducem aproape sentimentul de acasă prin serviciile noastre IPTV de înaltă calitate. Vei avea mereu o parte din casă cu tine, oriunde ai fi.</p>
+            <p class="sidebar-description">Cu Pixel Magix TV, distanța nu mai este o barieră. Oferim servicii IPTV sigure, rapide și curate, astfel încât să te poți bucura de canalele preferate oriunde ai fi pe glob.</p>
             <div class="sidebar-contact">
-                <h4>Contact:</h4>
-                <p><i class="fas fa-clock"></i> Luni - Vineri: 9.00 am. - 22.00 pm.</p>
-                <p><i class="fas fa-phone"></i> <a href="tel:+972555171043">+972 555 171 043</a></p>
+                <h4>Program suport</h4>
+                <p><i class="fas fa-clock"></i> Luni – Duminică: 09:00 – 23:00</p>
+                <p><i class="fas fa-phone"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">+972 555 171 043</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:suport@pixelmagix.tv">suport@pixelmagix.tv</a></p>
             </div>
             <div class="social-media">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.facebook.com/RaduCristiBMCmedia/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
     </div>
     <div class="overlay"></div>
 
     <div class="social-icons-fixed">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.facebook.com/RaduCristiBMCmedia/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
     </div>
 
     <main>
         <section id="hero" class="hero-section">
             <div class="hero-overlay"></div>
             <div class="container hero-content">
-                <div class="hero-text">
-                    <p class="subtitle">BMC MEDIA - POARTA TA CATRE DIVERTISMENT!</p>
-                    <h1 class="main-headline">Furnizor de incredere</h1>
-                    <h1 class="main-headline">pentru o experienta de neuitat.</h1>
-                    <a href="#" class="btn-pachete">Pachete Tv &#8250;</a>
-                    <div class="hero-price-badge">
-                        <p>Incepand De La</p>
-                        <p class="price">$11 / Luna</p>
+                <div class="hero-text" data-aos="fade-right">
+                    <span class="hero-tag">Pixel Magix TV – Poarta ta către divertisment</span>
+                    <h1 class="hero-title">Te conectăm la România, oriunde în lume</h1>
+                    <p class="hero-subtitle">Acces instant la peste 6.000 de canale internationale, 450 canale romanesti, 15.000 de filme si 500 de seriale. Streaming fara intreruperi, suport 24/7 si abonamente flexibile pentru diaspora romaneasca.</p>
+                    <div class="hero-actions">
+                        <a href="#abonamente" class="btn btn--primary">Vezi abonamentele</a>
+                        <a href="#contact" class="btn btn--ghost">Solicită un demo</a>
                     </div>
-                </div>
-                <div class="play-button-container">
-                    <div class="play-button-outer-circle"></div>
-                    <div class="play-button-inner-circle">
-                        <i class="fas fa-play"></i>
+                                        <div class="hero-highlights">
+                        <div>
+                            <strong>+6.000</strong>
+                            <span>Canale internationale</span>
+                        </div>
+                        <div>
+                            <strong>+450</strong>
+                            <span>Canale romanesti</span>
+                        </div>
+                        <div>
+                            <strong>+15.000</strong>
+                            <span>Filme la cerere</span>
+                        </div>
+                        <div>
+                            <strong>+500</strong>
+                            <span>Seriale TV</span>
+                        </div>
+                    </div>
+                <div class="hero-media" data-aos="fade-left">
+                    <div class="hero-card">
+                        <span class="hero-card__tag">Recomandat</span>
+                        <h3>Test gratuit 24h</h3>
+                        <p>Testează platforma noastră IPTV fără obligații și convinge-te de calitate.</p>
+                        <a href="https://wa.me/972555171043" class="btn btn--secondary">Solicită acces</a>
+                        <ul class="hero-card__list">
+                            <li><i class="fas fa-check"></i> Activare rapidă</li>
+                            <li><i class="fas fa-check"></i> Ghid de instalare pas cu pas</li>
+                            <li><i class="fas fa-check"></i> Suport dedicat</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
+        <section id="stats" class="stats-section">
+            <div class="container stats-grid">
+                <article class="stat-card" data-aos="zoom-in" data-target="6000">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Canale internationale</span>
+                </article>
+                <article class="stat-card" data-aos="zoom-in" data-target="450">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Canale romanesti</span>
+                </article>
+                <article class="stat-card" data-aos="zoom-in" data-target="15000">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Filme la cerere</span>
+                </article>
+                <article class="stat-card" data-aos="zoom-in" data-target="500">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Seriale TV</span>
+                </article>
+            </div>
+        </section>
 
-        <section id="features" class="features-section">
+        <section id="servicii" class="services-section">
             <div class="container">
-                <div class="features-grid">
-                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
-                        <h3>Calitate Superioară</h3>
-                        <p>Streaming la înaltă definiție pentru o experiență vizuală de neuitat.</p>
-                    </div>
-                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
-                        <h3>Compatibilitate Extinsă</h3>
-                        <p>Vizionează pe TV, laptop, tabletă sau telefon. Oriunde, oricând.</p>
-                    </div>
-                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Servicii complete</span>
+                    <h2>Tot ce ai nevoie pentru divertisment non-stop</h2>
+                    <p>Pixel Magix TV combină tehnologie de ultimă generație cu o echipă de suport atentă și prietenoasă.</p>
+                </div>
+                <div class="services-grid">
+                    <article class="service-card" data-aos="fade-up" data-aos-delay="50">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Streaming stabil</h3>
+                        <p>Servere optimizate și fluxuri redundante pentru o experiență fără buffer.</p>
+                    </article>
+                    <article class="service-card" data-aos="fade-up" data-aos-delay="150">
+                        <i class="fas fa-globe"></i>
+                        <h3>Oriunde în lume</h3>
+                        <p>Acces garantat în Europa, America de Nord și Orientul Mijlociu.</p>
+                    </article>
+                    <article class="service-card" data-aos="fade-up" data-aos-delay="250">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Protecție avansată</h3>
+                        <p>Conexiuni securizate și conturi monitorizate împotriva accesului neautorizat.</p>
+                    </article>
+                    <article class="service-card" data-aos="fade-up" data-aos-delay="350">
+                        <i class="fas fa-headset"></i>
                         <h3>Suport 24/7</h3>
-                        <p>Echipa noastră este mereu aici pentru a te ajuta cu orice problemă.</p>
+                        <p>Echipa noastră îți răspunde rapid în română, engleză și italiană.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="channels" class="channels-section">
+            <div class="container channels-grid">
+                <div class="channels-text" data-aos="fade-right">
+                    <span class="section-tag">Conținut premium</span>
+                    <h2>Canalele preferate, într-o interfață intuitivă</h2>
+                    <p>De la știri naționale și competiții sportive, până la filme, muzică și programe pentru copii, bibliotecile Pixel Magix sunt actualizate zilnic.</p>
+                    <ul class="channels-list">
+                        <li><i class="fas fa-tv"></i> Digi, Antena, PRO TV, Prima, TVR, Look Sport</li>
+                        <li><i class="fas fa-film"></i> HBO, Cinemax, FilmBox, AXN, Netflix Originals</li>
+                        <li><i class="fas fa-futbol"></i> Premier League, Champions League, La Liga, F1</li>
+                        <li><i class="fas fa-child"></i> Disney, Nickelodeon, Minimax, Cartoon Network</li>
+                        <li><i class="fas fa-language"></i> Peste 30 de limbi disponibile, inclusiv audio dublat</li>
+                    </ul>
+                    <div class="channels-cta">
+                        <a href="#abonamente" class="btn btn--primary">Vezi pachetele</a>
+                        <a href="#contact" class="btn btn--ghost">Primește lista completă</a>
+                    </div>
+                </div>
+                <div class="channels-media" data-aos="fade-left">
+                    <div class="channels-card">
+                        <img src="background.png" alt="Interfață Pixel Magix" loading="lazy">
+                        <div class="channels-card__badge">+300 canale HD</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="pricing" class="pricing-section" data-aos="zoom-in-up">
+        <section id="devices" class="devices-section">
+            <div class="container devices-grid" data-aos="fade-up">
+                <div class="devices-text">
+                    <span class="section-tag">Flexibilitate totală</span>
+                    <h2>Compatibil cu dispozitivul tău preferat</h2>
+                    <p>Pixel Magix funcționează nativ pe televizoare smart, box-uri Android, iOS, tablete, laptopuri și orice browser web modern.</p>
+                </div>
+                <div class="devices-logos">
+                    <span>Samsung TV</span>
+                    <span>LG webOS</span>
+                    <span>Android TV</span>
+                    <span>Apple TV</span>
+                    <span>Windows</span>
+                    <span>macOS</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="abonamente" class="pricing-section">
             <div class="container">
-                <h2>Alege Abonamentul Potrivit</h2>
-                <div class="toggle-container">
-                    <button class="toggle-btn active" data-plan="silver">Silver</button>
-                    <button class="toggle-btn" data-plan="gold">Gold</button>
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Planuri flexibile</span>
+                    <h2>Alege abonamentul perfect pentru familia ta</h2>
+                    <p>Toate abonamentele includ acces la conținut premium, actualizări automate ale listelor și suport tehnic non-stop.</p>
                 </div>
-                <div class="pricing-grid active" id="silver-plans">
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="price-header">
-                            <span class="price-value">12€</span>
-                            <span class="price-duration">1 Luna</span>
-                        </div>
-                        <h3 class="plan-name">Basic</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
-                        <div class="price-header">
-                            <span class="price-value">35€</span>
-                            <span class="price-duration">3 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Classic</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 1 Luna CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="price-header">
-                            <span class="price-value">60€</span>
-                            <span class="price-duration">6 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Value</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 1 Luna CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="400">
-                        <div class="price-header">
-                            <span class="price-value">110€</span>
-                            <span class="price-duration">12 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Core</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 2 Luni CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD/4K</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
-                    </div>
+                <div class="toggle-container" data-aos="fade-up">
+                    <button class="toggle-btn active" data-plan="lunar">Lunar</button>
+                    <button class="toggle-btn" data-plan="semestrial">6 luni</button>
+                    <button class="toggle-btn" data-plan="anual">12 luni</button>
                 </div>
-                <div class="pricing-grid" id="gold-plans">
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="100">
-                        <div class="price-header">
-                            <span class="price-value">14€</span>
-                            <span class="price-duration">1 Luna</span>
-                        </div>
-                        <h3 class="plan-name">Essential</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> Canale Internationale</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD/4K</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
+                <div class="pricing-wrapper">
+                    <div class="pricing-grid active" id="lunar-plans">
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="50">
+                            <div class="price-header">
+                                <span class="price-value">14€</span>
+                                <span class="price-duration">1 lună</span>
+                            </div>
+                            <h3 class="plan-name">Start</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> +12.000 canale TV &amp; radio</li>
+                                <li><i class="fas fa-check"></i> Filme și seriale la cerere</li>
+                                <li><i class="fas fa-check"></i> 3 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Instalare ghidată pe WhatsApp</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Solicită activare</a>
+                        </article>
+                        <article class="pricing-card pricing-card--highlight" data-aos="fade-up" data-aos-delay="150">
+                            <div class="price-header">
+                                <span class="price-value">18€</span>
+                                <span class="price-duration">1 lună</span>
+                            </div>
+                            <h3 class="plan-name">Premium</h3>
+                            <span class="plan-badge">Cel mai popular</span>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 4K + HDR &amp; Dolby Atmos</li>
+                                <li><i class="fas fa-check"></i> 5 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Replay TV 7 zile</li>
+                                <li><i class="fas fa-check"></i> Liste personalizate pentru copii</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--primary">Începe acum</a>
+                        </article>
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="250">
+                            <div class="price-header">
+                                <span class="price-value">25€</span>
+                                <span class="price-duration">1 lună</span>
+                            </div>
+                            <h3 class="plan-name">Family+</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> +4 conturi utilizator</li>
+                                <li><i class="fas fa-check"></i> Acces zone adulte (opțional)</li>
+                                <li><i class="fas fa-check"></i> Canale sport premium</li>
+                                <li><i class="fas fa-check"></i> Prioritate suport VIP</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Rezervă o discuție</a>
+                        </article>
                     </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="200">
-                        <div class="price-header">
-                            <span class="price-value">39€</span>
-                            <span class="price-duration">3 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Select</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 1 Luna CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> Canale Internationale</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD/4K</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
+                    <div class="pricing-grid" id="semestrial-plans">
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="50">
+                            <div class="price-header">
+                                <span class="price-value">75€</span>
+                                <span class="price-duration">6 luni</span>
+                            </div>
+                            <h3 class="plan-name">Start+</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 1 lună bonus</li>
+                                <li><i class="fas fa-check"></i> 3 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Pachet VOD extins</li>
+                                <li><i class="fas fa-check"></i> Reminder reînnoire</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Contactează-ne</a>
+                        </article>
+                        <article class="pricing-card pricing-card--highlight" data-aos="fade-up" data-aos-delay="150">
+                            <div class="price-header">
+                                <span class="price-value">99€</span>
+                                <span class="price-duration">6 luni</span>
+                            </div>
+                            <h3 class="plan-name">Premium+</h3>
+                            <span class="plan-badge">Recomandare</span>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 5 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Replay TV &amp; arhivă sport</li>
+                                <li><i class="fas fa-check"></i> Acces rapid la update-uri</li>
+                                <li><i class="fas fa-check"></i> Manager dedicat</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--primary">Rezervă pachetul</a>
+                        </article>
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="250">
+                            <div class="price-header">
+                                <span class="price-value">135€</span>
+                                <span class="price-duration">6 luni</span>
+                            </div>
+                            <h3 class="plan-name">Family Max</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 7 profiluri dedicate</li>
+                                <li><i class="fas fa-check"></i> Zone regionale multiple</li>
+                                <li><i class="fas fa-check"></i> Integrare box Android inclusă</li>
+                                <li><i class="fas fa-check"></i> Linie de suport prioritară</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Vorbește cu un consultant</a>
+                        </article>
                     </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="300">
-                        <div class="price-header">
-                            <span class="price-value">69€</span>
-                            <span class="price-duration">6 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Ultimate</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 2 Luni CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> Canale Internationale</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD/4K</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                    <div class="pricing-card" data-aos="fade-up" data-aos-delay="400">
-                        <div class="price-header">
-                            <span class="price-value">139€</span>
-                            <span class="price-duration">12 Luni</span>
-                        </div>
-                        <h3 class="plan-name">Supreme</h3>
-                        <ul class="features-list">
-                            <li><i class="fas fa-check"></i> 2 Luni CADOU!</li>
-                            <li><i class="fas fa-check"></i> Filme 4K</li>
-                            <li><i class="fas fa-check"></i> 5 Dispozitive Simultan</li>
-                            <li><i class="fas fa-check"></i> 450+ Canale Romanesti</li>
-                            <li><i class="fas fa-check"></i> Canale Internationale</li>
-                            <li><i class="fas fa-check"></i> 15.000+ De Filme Subtitrate</li>
-                            <li><i class="fas fa-check"></i> 500+ De Seriale Subtitrate</li>
-                            <li><i class="fas fa-check"></i> Calitate SD/HD/4K</li>
-                            <li><i class="fas fa-check"></i> Info Program Tv [EPG]</li>
-                            <li><i class="fas fa-check"></i> Suport 24/7 + Instalare</li>
-                            <li><i class="fas fa-check"></i> [OPTIONAL] Canale Adult</li>
-                            <li><i class="fas fa-check"></i> Filme & Seriale La Cerere</li>
-                        </ul>
-                        <a href="https://wa.me/972555171043" class="btn-details">Detalii <i class="fas fa-arrow-right"></i></a>
+
+                    <div class="pricing-grid" id="anual-plans">
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="50">
+                            <div class="price-header">
+                                <span class="price-value">140€</span>
+                                <span class="price-duration">12 luni</span>
+                            </div>
+                            <h3 class="plan-name">Essential</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> Economisești 28€</li>
+                                <li><i class="fas fa-check"></i> 3 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Garanție satisfacție 30 zile</li>
+                                <li><i class="fas fa-check"></i> Alertă expirare cu 10 zile înainte</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Rezervă acum</a>
+                        </article>
+                        <article class="pricing-card pricing-card--highlight" data-aos="fade-up" data-aos-delay="150">
+                            <div class="price-header">
+                                <span class="price-value">180€</span>
+                                <span class="price-duration">12 luni</span>
+                            </div>
+                            <h3 class="plan-name">Ultra</h3>
+                            <span class="plan-badge">Best Value</span>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 5 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Reluări 10 zile &amp; DVR cloud</li>
+                                <li><i class="fas fa-check"></i> Evenimente sportive pay-per-view</li>
+                                <li><i class="fas fa-check"></i> Suport preferențial 24/7</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--primary">Activează pachetul</a>
+                        </article>
+                        <article class="pricing-card" data-aos="fade-up" data-aos-delay="250">
+                            <div class="price-header">
+                                <span class="price-value">220€</span>
+                                <span class="price-duration">12 luni</span>
+                            </div>
+                            <h3 class="plan-name">Business</h3>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check"></i> 10 dispozitive simultan</li>
+                                <li><i class="fas fa-check"></i> Monitorizare uptime dedicată</li>
+                                <li><i class="fas fa-check"></i> Raport lunar utilizare</li>
+                                <li><i class="fas fa-check"></i> Training pentru echipe</li>
+                            </ul>
+                            <a href="https://wa.me/972555171043" class="btn btn--secondary">Solicită ofertă personalizată</a>
+                        </article>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="showcase" class="showcase-section">
-            <h2>Filme Populare</h2>
-            <div class="scroller" data-speed="slow">
-                <ul class="tag-list scroller__inner">
-                    <li><img src="https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/uJYYizSuA9Y3DCs0qS4qWvHfZg4.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/A7EByudX0eOzlkQ2FIbogzyazm2.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/4q2NNj4S5dG2RLF9CpXjZpdSF90.jpg" alt="Movie Poster"></li>
-                     <li><img src="https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/uJYYizSuA9Y3DCs0qS4qWvHfZg4.jpg" alt="Movie Poster"></li>
-                    <li><img src="https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg" alt="Movie Poster"></li>
-                </ul>
+        <section id="testimoniale" class="testimonials-section">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <span class="section-tag">Ce spun clienții</span>
+                    <h2>Feedback autentic din partea comunității noastre</h2>
+                    <p>Suntem recomandați de români din toată lumea pentru stabilitate, promptitudine și calitatea conținutului oferit.</p>
+                </div>
+                <div class="testimonials-slider" data-aos="fade-up">
+                    <button class="slider-btn slider-btn--prev" aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>
+                    <div class="testimonials-track">
+                        <article class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>„În Germania, găseam greu posturi românești stabile. Pixel Magix TV a schimbat totul – calitate impecabilă și suport rapid când am avut întrebări.”</p>
+                            <span class="testimonial-author">Andreea M. – München</span>
+                        </article>
+                        <article class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p>„Îmi place că pot urmări Champions League fără întreruperi și că pot reveni la emisiunile ratate. Abonamentul anual e cea mai bună alegere.”</p>
+                            <span class="testimonial-author">Radu M. – Toronto</span>
+                        </article>
+                        <article class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>„Suntem o familie mare în Italia și folosim Pixel Magix pe 6 dispozitive. Copiii au secțiunea lor, iar bunicii găsesc posturile preferate ușor.”</p>
+                            <span class="testimonial-author">Familia Ionescu – Milano</span>
+                        </article>
+                        <article class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>„Suportul tehnic răspunde rapid, iar platforma rămâne stabilă chiar și la meciuri importante.”</p>
+                            <span class="testimonial-author">Marius M. – Londra</span>
+                        </article>
+                    </div>
+                    <button class="slider-btn slider-btn--next" aria-label="Următor"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
         </section>
-
         <section id="faq" class="faq-section">
             <div class="container faq-container">
-                <div class="faq-left">
+                <div class="faq-left" data-aos="fade-right">
                     <div class="faq-item">
-                        <button class="faq-question active">Pot Testa Gratuit?</button>
+                        <button class="faq-question active">Oferiți test gratuit?</button>
                         <div class="faq-answer" style="max-height: fit-content;">
-                            <p>Da! Avem un test gratuit IPTV de 1 zi. Tot ce trebuie să faci este să ne trimiți un mesaj.</p>
+                            <p>Desigur! Trimite-ne un mesaj pe WhatsApp și îți activăm un cont demo valabil 24 de ore. Vei primi și un ghid rapid de instalare.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">Pot renunța la abonament?</button>
+                        <button class="faq-question">Pot întrerupe abonamentul oricând?</button>
                         <div class="faq-answer">
-                            <p>Nu aveti nicio obligatie contractuala. Nu se efectueaza plati lunare automate in cazul in care decideti sa va abonati la BMC Media. Aveti libertatea de a anula in orice moment, iar in primele 5 zile de la efectuarea platii beneficiati de garantia calitatii, puteti solicita rambursarea banilor. Procesarea rambursarii se va face fara probleme in decurs de 5 zile lucratoare, in conformitate cu politica procesatorului de plati.</p>
+                            <p>Abonamentele se prelungesc doar la cerere. Nu percepem plăți recurente automate, astfel încât să controlezi în totalitate abonamentul.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">De ce viteza de internet am nevoie pentru a asigura o funcționare perfectă a serviciului?</button>
+                        <button class="faq-question">Ce conexiune la internet este necesară?</button>
                         <div class="faq-answer">
-                            <p>Pentru canale difuzate in format:<br>- 4K: minim 80 Mbit/s<br>- FULL HD: minim 40 Mbit/s<br>- HD: minim 30 Mbit/s<br>- SD: minim 8 Mbit/s</p>
+                            <p>Recomandăm minim 30 Mbps pentru HD, 50 Mbps pentru Full HD și 80 Mbps pentru fluxurile 4K. Pentru cea mai bună performanță, conectează dispozitivul prin cablu sau Wi-Fi 5 GHz.</p>
                         </div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question">În cât timp se vor activa serviciile după efectuarea plății?</button>
+                        <button class="faq-question">Cât durează activarea serviciului?</button>
                         <div class="faq-answer">
-                            <p>După ce efectuați plata pentru un abonament, vă rugăm să ne trimiteți adresa de email folosită sau numele utilizat la plată pentru a putea identifica tranzacția și a activa/prelungi abonamentul. Activarea se va realiza în câteva minute.</p>
+                            <p>După confirmarea plății, activăm abonamentul în 5-10 minute. Îți trimitem credențialele și instrucțiunile direct pe email sau WhatsApp.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">Ce aplicații recomandă Pixel Magix?</button>
+                        <div class="faq-answer">
+                            <p>SmartOne IPTV, SIPTV, iMPlayer, XCIPTV sau Tivimate. La cerere, îți configurăm remote aplicația preferată.</p>
                         </div>
                     </div>
                 </div>
-                <div class="faq-right">
+                <div class="faq-right" data-aos="fade-left">
                     <div class="promo-card">
                         <div class="promo-header">
-                            <span class="promo-tag">FII MAI APROAPE DE ACASA ORIUNDE TE-AI AFLA!</span>
-                            <h3 class="promo-title">acasa</h3>
+                            <span class="promo-tag">Fii mai aproape de casă</span>
+                            <h3 class="promo-title">Discută cu un consultant</h3>
                         </div>
-                        <p class="promo-description">Cu Pixel Magix TV, nu vei mai simti dorul de casa, indiferent de locul in care te afli in lume. Te ajutam sa fii mai aproape de casa, oferindu-ti servicii IPTV de cea mai buna calitate.</p>
+                        <p class="promo-description">Spune-ne ce canale urmărești, ce dispozitive folosești și îți recomandăm pachetul ideal. Totul fără costuri și fără obligații.</p>
                         <div class="promo-image-container">
-                            <img src="https" alt="Happy man using laptop">
-                            <button class="play-button"><i class="fas fa-play"></i></button>
+                            <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=600&q=80" alt="Client fericit folosind Pixel Magix" loading="lazy">
+                            <button class="play-button" aria-label="Vezi prezentarea"><i class="fas fa-play"></i></button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="container contact-grid">
+                <div class="contact-info" data-aos="fade-right">
+                    <span class="section-tag">Contact direct</span>
+                    <h2>Hai să găsim soluția perfectă pentru tine</h2>
+                    <p>Completează formularul și te contactăm în maxim 30 de minute în intervalul programului de lucru.</p>
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">+972 555 171 043</a></p>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:suport@pixelmagix.tv">suport@pixelmagix.tv</a></p>
+                        <p><i class="fas fa-clock"></i> Luni – Duminică: 09:00 – 23:00 (EET)</p>
+                        <p><i class="fas fa-map-marked-alt"></i> București • Londra • Toronto</p>
+                    </div>
+                    <div class="contact-cta">
+                        <a href="https://wa.me/972555171043" class="btn btn--primary">Scrie-ne pe WhatsApp</a>
+                    </div>
+                </div>
+                <div class="contact-form" data-aos="fade-left">
+                    <form action="#" method="post" aria-label="Formular contact">
+                        <div class="form-group">
+                            <label for="nume">Nume complet</label>
+                            <input type="text" id="nume" name="nume" placeholder="Introduceți numele" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adresă de email</label>
+                            <input type="email" id="email" name="email" placeholder="exemplu@domeniu.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tara">Țara de reședință</label>
+                            <input type="text" id="tara" name="tara" placeholder="Ex. Italia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mesaj">Mesaj</label>
+                            <textarea id="mesaj" name="mesaj" rows="4" placeholder="Spune-ne ce canale urmărești sau ce dispozitiv folosești"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Trimite mesajul</button>
+                        <p class="form-note">Prin completarea formularului ești de acord cu prelucrarea datelor pentru a te contacta.</p>
+                    </form>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer id="contact" class="footer-section">
-        <div class="container">
-            <div class="footer-content">
-                <h3>Pixel Magix</h3>
-                <p>WhatsApp: <a href="tel:+972555171043">+972 555 171 043</a></p>
-                <div class="compatibility">
-                    <p>Compatibil cu:</p>
-                    <div class="logos">
-                        <span>Samsung TV</span>
-                        <span>LG TV</span>
-                        <span>Android TV</span>
-                        <span>Windows</span>
-                    </div>
-                </div>
+    <footer class="footer-section">
+        <div class="container footer-grid">
+            <div class="footer-column">
+                <h3>Pixel Magix TV</h3>
+                <p>Platformă IPTV premium destinată românilor din diaspora. Ne mândrim cu stabilitate, conținut bogat și suport prietenos.</p>
             </div>
+            <div class="footer-column">
+                <h4>Linkuri utile</h4>
+                <ul>
+                    <li><a href="#hero">Acasă</a></li>
+                    <li><a href="#servicii">Servicii</a></li>
+                    <li><a href="#abonamente">Abonamente</a></li>
+                    <li><a href="#faq">Întrebări frecvente</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Contact rapid</h4>
+                <p><i class="fas fa-phone"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">+972 555 171 043</a></p>
+                <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/972555171043" target="_blank" rel="noopener">WhatsApp imediat</a></p>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:suport@pixelmagix.tv">suport@pixelmagix.tv</a></p>
+            </div>
+            <div class="footer-column">
+                <h4>Abonează-te la noutăți</h4>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Emailul tău">
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </form>
+                <p class="newsletter-note">Primești oferte exclusive, actualizări și ghiduri utile.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> Pixel Magix TV. Toate drepturile rezervate.</p>
         </div>
     </footer>
 
-    <div class="whatsapp-bubble" id="whatsapp-bubble">
+    <button class="scroll-to-top" aria-label="Înapoi sus"><i class="fas fa-arrow-up"></i></button>
+
+    <div class="whatsapp-bubble" id="whatsapp-bubble" aria-label="Deschide chat WhatsApp">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
     </div>
 
-    <div class="whatsapp-chat-window" id="whatsapp-chat-window">
+    <div class="whatsapp-chat-window" id="whatsapp-chat-window" role="dialog" aria-modal="true" aria-hidden="true">
         <div class="chat-header">
             <span>WhatsApp Chat</span>
-            <button class="close-btn" id="close-chat-btn">&times;</button>
+            <button class="close-btn" id="close-chat-btn" aria-label="Închide chatul">&times;</button>
         </div>
         <div class="chat-body">
-            <textarea id="whatsapp-message" placeholder="Scrie mesajul tau aici..."></textarea>
+            <textarea id="whatsapp-message" placeholder="Scrie mesajul tău aici..."></textarea>
         </div>
         <div class="chat-footer">
             <button id="send-whatsapp-message">Trimite</button>
@@ -389,3 +580,18 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
