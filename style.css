@@ -703,6 +703,12 @@ a {
     gap: 1.5rem;
 }
 
+.testimonials-window {
+    overflow: hidden;
+    flex: 1;
+    scroll-snap-type: x mandatory;
+}
+
 
 .testimonial-card {
     background: rgba(10, 13, 32, 0.75);
@@ -746,6 +752,12 @@ a {
 .slider-btn:hover {
     transform: translateY(-2px);
     background: rgba(108, 92, 231, 0.8);
+}
+
+.slider-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+    pointer-events: none;
 }
 
 .faq-section {
@@ -1263,8 +1275,6 @@ textarea {
 .testimonials-track {
     display: flex;
     gap: 1.5rem;
-    overflow: hidden;
-    scroll-snap-type: x mandatory;
     transition: transform 0.5s ease;
 }
 

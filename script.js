@@ -144,14 +144,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = Array.from(sliderTrack.children);
         let currentIndex = 0;
 
+        const computeMetrics = () => {
+            if (slides.length === 0) {
+                return { slideWidth: 0, gapValue: 0, maxIndex: 0 };
+            }
+
+            const slideWidth = slides[0].getBoundingClientRect().width;
+            const trackStyles = window.getComputedStyle(sliderTrack);
+            const gapValue = parseFloat(trackStyles.columnGap || trackStyles.gap || '0') || 0;
+            const viewportWidth = sliderTrack.parentElement?.getBoundingClientRect().width || slideWidth;
+            const visibleCount = Math.max(1, Math.floor((viewportWidth + gapValue) / (slideWidth + gapValue)));
+            const maxIndex = Math.max(0, slides.length - visibleCount);
+
+            return { slideWidth, gapValue, maxIndex };
+        };
+
         const updateSlider = () => {
-            const slideWidth = slides[0]?.getBoundingClientRect().width || 0;
-            sliderTrack.style.transform = `translateX(-${currentIndex * (slideWidth + 24)}px)`;
+            const { slideWidth, gapValue, maxIndex } = computeMetrics();
+            if (!slideWidth) return;
+
+            currentIndex = Math.min(currentIndex, maxIndex);
+            sliderTrack.style.transform = `translateX(-${currentIndex * (slideWidth + gapValue)}px)`;
+
+            if (prevButton) prevButton.disabled = currentIndex === 0;
+            if (nextButton) nextButton.disabled = currentIndex === maxIndex;
         };
 
         const goToSlide = (index) => {
             if (slides.length === 0) return;
-            currentIndex = (index + slides.length) % slides.length;
+            const { maxIndex } = computeMetrics();
+            currentIndex = Math.min(Math.max(index, 0), maxIndex);
             updateSlider();
         };
 
@@ -165,6 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 sliderTrack.style.transition = '';
             });
         });
+
+        updateSlider();
     }
 
     // WhatsApp chat interactions
