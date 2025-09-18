@@ -32,6 +32,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Locale-aware currency display
+    const priceElements = document.querySelectorAll('.price-value[data-price]');
+    if (priceElements.length > 0) {
+        const applyCurrency = (currency) => {
+            const symbol = currency === 'GBP' ? '\u00a3' : '\u20ac';
+            priceElements.forEach(element => {
+                const amount = element.dataset.price || '';
+                if (amount.length === 0) return;
+                element.textContent = `${symbol}${amount}`;
+            });
+        };
+
+        const isUKVisitor = () => {
+            if (typeof Intl === 'undefined') {
+                return false;
+            }
+
+            try {
+                const languages = navigator.languages || [navigator.language];
+                if (languages.some(lang => typeof lang === 'string' && lang.toLowerCase().includes('en-gb'))) {
+                    return true;
+                }
+
+                const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+                return ['Europe/London', 'Europe/Belfast', 'Europe/Guernsey', 'Europe/Jersey', 'Europe/Isle_of_Man'].includes(timeZone);
+            } catch (error) {
+                return false;
+            }
+        };
+
+        applyCurrency(isUKVisitor() ? 'GBP' : 'EUR');
+    }
+
     // FAQ accordion functionality
     const faqQuestions = document.querySelectorAll('.faq-question');
 
@@ -271,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentYear.textContent = new Date().getFullYear().toString();
     }
 });
+
 
 
 
