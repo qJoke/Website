@@ -1,4 +1,4 @@
-﻿
+
 document.addEventListener('DOMContentLoaded', () => {
     if (window.AOS) {
         AOS.init({
@@ -258,9 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cursorDot && cursorOutline) {
         window.addEventListener('mousemove', (event) => {
             const { clientX, clientY } = event;
-            cursorDot.style.transform = `translate(${clientX}px, ${clientY}px)`;
+            const translate = `translate(${clientX}px, ${clientY}px) translate(-50%, -50%)`;
+            cursorDot.style.transform = translate;
             cursorOutline.animate({
-                transform: `translate(${clientX}px, ${clientY}px)`
+                transform: translate
             }, { duration: 350, fill: 'forwards' });
         });
 
