@@ -137,8 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Testimonials slider
     const sliderTrack = document.querySelector('.testimonials-track');
+    const sliderWindow = document.querySelector('.testimonials-window');
     const prevButton = document.querySelector('.slider-btn--prev');
     const nextButton = document.querySelector('.slider-btn--next');
+    const touchModeQuery = typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 768px)') : null;
+    const isTouchMode = () => (touchModeQuery ? touchModeQuery.matches : false);
 
     if (sliderTrack) {
         const slides = Array.from(sliderTrack.children);
@@ -152,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const slideWidth = slides[0].getBoundingClientRect().width;
             const trackStyles = window.getComputedStyle(sliderTrack);
             const gapValue = parseFloat(trackStyles.columnGap || trackStyles.gap || '0') || 0;
-            const viewportWidth = sliderTrack.parentElement?.getBoundingClientRect().width || slideWidth;
+            const viewportWidth = sliderWindow?.getBoundingClientRect().width || slideWidth;
             const visibleCount = Math.max(1, Math.floor((viewportWidth + gapValue) / (slideWidth + gapValue)));
             const maxIndex = Math.max(0, slides.length - visibleCount);
 
@@ -160,6 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const updateSlider = () => {
+            if (isTouchMode()) {
+                currentIndex = 0;
+                sliderTrack.style.transform = 'none';
+                sliderWindow?.scrollTo({ left: 0, behavior: 'auto' });
+                if (prevButton) prevButton.disabled = true;
+                if (nextButton) nextButton.disabled = true;
+                return;
+            }
+
             const { slideWidth, gapValue, maxIndex } = computeMetrics();
             if (!slideWidth) return;
 
@@ -171,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const goToSlide = (index) => {
-            if (slides.length === 0) return;
+            if (isTouchMode() || slides.length === 0) return;
             const { maxIndex } = computeMetrics();
             currentIndex = Math.min(Math.max(index, 0), maxIndex);
             updateSlider();
@@ -180,13 +192,24 @@ document.addEventListener('DOMContentLoaded', () => {
         prevButton?.addEventListener('click', () => goToSlide(currentIndex - 1));
         nextButton?.addEventListener('click', () => goToSlide(currentIndex + 1));
 
-        window.addEventListener('resize', () => {
+        const handleResize = () => {
             sliderTrack.style.transition = 'none';
             updateSlider();
             requestAnimationFrame(() => {
-                sliderTrack.style.transition = '';
+                sliderTrack.style.transition = isTouchMode() ? 'none' : '';
             });
-        });
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        if (touchModeQuery) {
+            const mediaListener = () => handleResize();
+            if (typeof touchModeQuery.addEventListener === 'function') {
+                touchModeQuery.addEventListener('change', mediaListener);
+            } else if (typeof touchModeQuery.addListener === 'function') {
+                touchModeQuery.addListener(mediaListener);
+            }
+        }
 
         updateSlider();
     }

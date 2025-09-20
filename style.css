@@ -1,4 +1,3 @@
-﻿
 :root {
     --color-bg: #050714;
     --color-surface: rgba(14, 17, 37, 0.85);
@@ -1272,6 +1271,31 @@ textarea {
 
     .testimonials-slider {
         flex-direction: column;
+        align-items: stretch;
+        gap: 1.25rem;
+    }
+
+    .testimonials-window {
+        flex: none;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        padding-bottom: 0.5rem;
+    }
+
+    .testimonials-window::-webkit-scrollbar {
+        display: none;
+    }
+
+    .testimonials-track {
+        min-width: max-content;
+        padding-bottom: 0.5rem;
+    }
+
+    .testimonials-track > * {
+        flex: 0 0 min(320px, 90vw);
     }
 
     .slider-btn {
