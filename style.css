@@ -1,4 +1,4 @@
-
+﻿
 :root {
     --color-bg: #050714;
     --color-surface: rgba(14, 17, 37, 0.85);
@@ -631,9 +631,19 @@ a {
     box-shadow: 0 20px 60px rgba(5, 8, 20, 0.35);
     position: relative;
     overflow: hidden;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 1.4rem;
     min-width: 0;
+}
+
+.pricing-card .features-list {
+    flex-grow: 1;
+}
+
+.pricing-card .btn {
+    margin-top: auto;
+    align-self: center;
 }
 
 .pricing-card--highlight {
@@ -1292,6 +1302,7 @@ textarea {
 
     .pricing-card .btn {
         width: 100%;
+        align-self: stretch;
     }
 
     .contact-grid {
