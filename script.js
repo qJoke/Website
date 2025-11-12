@@ -274,27 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', closeSidebar);
     });
 
-    // Custom cursor functionality
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorOutline = document.querySelector('.cursor-outline');
-
-    if (cursorDot && cursorOutline) {
-        window.addEventListener('mousemove', (event) => {
-            const { clientX, clientY } = event;
-            const translate = `translate(${clientX}px, ${clientY}px) translate(-50%, -50%)`;
-            cursorDot.style.transform = translate;
-            cursorOutline.animate({
-                transform: translate
-            }, { duration: 350, fill: 'forwards' });
-        });
-
-        const interactiveElements = document.querySelectorAll('a, button, input, textarea');
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
-        });
-    }
-
     // Navbar scroll behaviour
     const navbar = document.querySelector('.navbar');
     const scrollToTopBtn = document.querySelector('.scroll-to-top');

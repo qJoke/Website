@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <canvas id="fluid" class="fluid-canvas" aria-hidden="true"></canvas>
 
     <header class="top-bar">
         <div class="container top-bar__content">
@@ -628,6 +627,7 @@
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="fluid-cursor.js" defer></script>
     <script src="script.js"></script>
 </body>
 </html>
