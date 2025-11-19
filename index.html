@@ -582,7 +582,7 @@
                     </div>
                 </div>
                 <div class="contact-form" data-aos="fade-left">
-                    <form action="#" method="post" aria-label="Formular contact">
+                    <form id="contact-form" action="#" method="post" aria-label="Formular contact">
                         <div class="form-group">
                             <label for="nume">Nume complet</label>
                             <input type="text" id="nume" name="nume" placeholder="Introduceți numele" required>
@@ -615,6 +615,10 @@
                             aria-hidden="true">
                             <i class="fas fa-check-circle" aria-hidden="true"></i>
                             <span>Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.</span>
+                        </div>
+                        <div class="form-group" style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                            <label for="website">Nu completa acest câmp</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                         </div>
                         <p class="form-note">Prin completarea formularului ești de acord cu prelucrarea datelor pentru a
                             te contacta. Cel puțin numărul de telefon (cu prefix) sau emailul trebuie completat.</p>
@@ -684,6 +688,7 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="fluid-cursor.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
     <script src="script.js"></script>
 </body>
 

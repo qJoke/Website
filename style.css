@@ -973,6 +973,14 @@ textarea {
     font-size: 1.1rem;
 }
 
+.form-status.error {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.14), rgba(255, 107, 107, 0.2));
+}
+
+.form-status.error i {
+    color: var(--color-accent);
+}
+
 .form-note {
     font-size: 0.8rem;
     color: var(--color-text-muted);

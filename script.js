@@ -343,11 +343,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Require at least one contact method in the form
+    // Require at least one contact method in the form + send via EmailJS
     const contactForm = document.querySelector('.contact-form form');
     const phoneInput = document.getElementById('telefon');
     const emailInput = document.getElementById('email');
+    const nameInput = document.getElementById('nume');
+    const countryInput = document.getElementById('tara');
+    const providerInput = document.getElementById('furnizor');
+    const messageInput = document.getElementById('mesaj');
+    const honeypotInput = document.getElementById('website');
     const statusBox = document.querySelector('.form-status');
+    const statusIcon = statusBox ? statusBox.querySelector('i') : null;
+    const submitButton = contactForm ? contactForm.querySelector('button[type=\"submit\"]') : null;
+    const emailClient = window.emailjs;
+    const emailConfig = {
+        serviceId: 'service_orxx2ov',
+        templateId: 'template_0knsbj1',
+        publicKey: 'AyXyYZ2ZGPHEsL38U'
+    };
+
+    const formatDate = () => {
+        const now = new Date();
+        const pad = (value) => String(value).padStart(2, '0');
+        return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    };
+
+    if (emailClient && typeof emailClient.init === 'function') {
+        emailClient.init({ publicKey: emailConfig.publicKey });
+    } else {
+        console.warn('EmailJS SDK nu a fost încărcat.');
+    }
 
     if (contactForm && phoneInput && emailInput) {
         const validateContactFields = () => {
@@ -366,11 +391,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const hideStatus = () => {
             if (!statusBox) return;
-            statusBox.classList.remove('visible');
+            statusBox.classList.remove('visible', 'error');
             statusBox.setAttribute('aria-hidden', 'true');
         };
 
-        const showStatus = (message) => {
+        const showStatus = (message, isError = false) => {
             if (!statusBox) return;
             const textTarget = statusBox.querySelector('span');
             if (textTarget) {
@@ -378,8 +403,18 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 statusBox.textContent = message;
             }
+            if (statusIcon) {
+                statusIcon.className = isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            }
+            statusBox.classList.toggle('error', Boolean(isError));
             statusBox.classList.add('visible');
             statusBox.setAttribute('aria-hidden', 'false');
+        };
+
+        const setSendingState = (isSending) => {
+            if (!submitButton) return;
+            submitButton.disabled = isSending;
+            submitButton.textContent = isSending ? 'Se trimite...' : 'Trimite mesajul';
         };
 
         phoneInput.addEventListener('input', () => {
@@ -391,20 +426,49 @@ document.addEventListener('DOMContentLoaded', () => {
             validateContactFields();
         });
 
-        contactForm.addEventListener('submit', (event) => {
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            hideStatus();
             validateContactFields();
+
             if (!contactForm.checkValidity()) {
-                event.preventDefault();
                 contactForm.reportValidity();
-                hideStatus();
                 return;
             }
 
-            event.preventDefault();
-            showStatus('Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.');
-            contactForm.reset();
-            phoneInput.setCustomValidity('');
-            emailInput.setCustomValidity('');
+            if (honeypotInput && honeypotInput.value.trim().length > 0) {
+                return;
+            }
+
+            if (!emailClient || typeof emailClient.send !== 'function') {
+                showStatus('Serviciul de email nu este disponibil acum. Te rugăm să ne scrii pe WhatsApp.', true);
+                return;
+            }
+
+            setSendingState(true);
+
+            const templateParams = {
+                nume: nameInput?.value.trim() || '',
+                email: emailInput.value.trim(),
+                telefon: phoneInput.value.trim(),
+                tara: countryInput?.value.trim() || '',
+                provider: providerInput?.value.trim() || '',
+                mesaj: messageInput?.value.trim() || '',
+                date: formatDate()
+            };
+
+            try {
+                await emailClient.send(emailConfig.serviceId, emailConfig.templateId, templateParams);
+                showStatus('Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.');
+                contactForm.reset();
+                phoneInput.setCustomValidity('');
+                emailInput.setCustomValidity('');
+            } catch (error) {
+                console.error('EmailJS error:', error);
+                showStatus('Nu am putut trimite mesajul. Încearcă din nou sau contactează-ne pe WhatsApp.', true);
+            } finally {
+                setSendingState(false);
+            }
         });
     }
 
