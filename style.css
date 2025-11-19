@@ -32,8 +32,8 @@ body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     background: radial-gradient(circle at top, rgba(108, 92, 231, 0.12), transparent 50%) no-repeat,
-                radial-gradient(circle at 20% 20%, rgba(15, 208, 192, 0.1), transparent 40%) no-repeat,
-                var(--color-bg);
+        radial-gradient(circle at 20% 20%, rgba(15, 208, 192, 0.1), transparent 40%) no-repeat,
+        var(--color-bg);
     color: var(--color-text);
     overflow-x: hidden;
 }
@@ -72,7 +72,9 @@ a {
 }
 
 .section-tag {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.85rem;
@@ -82,7 +84,9 @@ a {
 }
 
 .btn {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
@@ -265,10 +269,11 @@ a {
 .hamburger:hover {
     transform: translateY(-2px);
 }
+
 .hero-section {
     position: relative;
     padding: 6.5rem 0;
-    background: url('background.png') center/cover no-repeat;
+    background: url('background.webp') center/cover no-repeat;
     min-height: 90vh;
     display: flex;
     align-items: center;
@@ -297,7 +302,9 @@ a {
 }
 
 .hero-tag {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     align-items: center;
     gap: 0.5rem;
     padding: 0.4rem 1rem;
@@ -577,12 +584,15 @@ a {
     color: #fff;
     border-color: rgba(255, 255, 255, 0.2);
 }
+
 .pricing-section {
     padding: 5.5rem 0;
 }
 
 .toggle-container {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(10, 13, 32, 0.7);
     border-radius: 999px;
     padding: 0.4rem;
@@ -863,6 +873,7 @@ a {
 .play-button:hover {
     transform: scale(1.05);
 }
+
 .contact-section {
     padding: 5rem 0;
 }
@@ -908,7 +919,8 @@ label {
     font-weight: 600;
 }
 
-input, textarea {
+input,
+textarea {
     padding: 0.85rem 1rem;
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -918,7 +930,8 @@ input, textarea {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     outline: none;
     border-color: rgba(108, 92, 231, 0.7);
     box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
@@ -946,11 +959,13 @@ textarea {
     gap: 2rem;
 }
 
-.footer-column h3, .footer-column h4 {
+.footer-column h3,
+.footer-column h4 {
     margin-top: 0;
 }
 
-.footer-column p, .footer-column a {
+.footer-column p,
+.footer-column a {
     color: var(--color-text-muted);
 }
 
@@ -1130,7 +1145,8 @@ textarea {
     z-index: 1400;
 }
 
-.chat-header, .chat-footer {
+.chat-header,
+.chat-footer {
     padding: 1rem 1.25rem;
     background: rgba(10, 14, 32, 0.85);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -1275,7 +1291,7 @@ textarea {
         padding-bottom: 0.5rem;
     }
 
-    .testimonials-track > * {
+    .testimonials-track>* {
         flex: 0 0 min(320px, 90vw);
     }
 
@@ -1406,9 +1422,7 @@ textarea {
     transition: transform 0.5s ease;
 }
 
-.testimonials-track > * {
+.testimonials-track>* {
     flex: 0 0 min(320px, 85vw);
     scroll-snap-align: start;
 }
-
-
