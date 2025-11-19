@@ -44,17 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        const isUKVisitor = () => {
-            if (typeof Intl === 'undefined') {
-                return false;
-            }
-
+        // Heuristic fallback (Timezone/Language)
+        const checkHeuristic = () => {
+            if (typeof Intl === 'undefined') return false;
             try {
                 const languages = navigator.languages || [navigator.language];
                 if (languages.some(lang => typeof lang === 'string' && lang.toLowerCase().includes('en-gb'))) {
                     return true;
                 }
-
                 const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
                 return ['Europe/London', 'Europe/Belfast', 'Europe/Guernsey', 'Europe/Jersey', 'Europe/Isle_of_Man'].includes(timeZone);
             } catch (error) {
@@ -62,7 +59,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        applyCurrency(isUKVisitor() ? 'GBP' : 'EUR');
+        const detectLocation = async () => {
+            // REPLACE 'YOUR_TOKEN_HERE' WITH YOUR IPINFO.IO API KEY
+            // Example: const token = '1234567890abcdef';
+            const token = 'b4bd4c28b8a326';
+
+            try {
+                const url = token ? `https://ipinfo.io/json?token=${token}` : 'https://ipinfo.io/json';
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('IP check failed');
+
+                const data = await response.json();
+                return data.country === 'GB';
+            } catch (error) {
+                console.warn('IP geolocation failed, falling back to heuristics:', error);
+                return checkHeuristic();
+            }
+        };
+
+        // Initialize
+        detectLocation().then(isUK => {
+            applyCurrency(isUK ? 'GBP' : 'EUR');
+        });
     }
 
     // FAQ accordion functionality
