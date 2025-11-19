@@ -941,6 +941,38 @@ textarea {
     resize: vertical;
 }
 
+.input-note {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: -0.2rem 0 0;
+}
+
+.form-status {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(15, 208, 192, 0.14), rgba(108, 92, 231, 0.14));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: var(--transition);
+    pointer-events: none;
+}
+
+.form-status.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-status i {
+    color: var(--color-secondary);
+    font-size: 1.1rem;
+}
+
 .form-note {
     font-size: 0.8rem;
     color: var(--color-text-muted);

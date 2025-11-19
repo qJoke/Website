@@ -588,12 +588,22 @@
                             <input type="text" id="nume" name="nume" placeholder="Introduceți numele" required>
                         </div>
                         <div class="form-group">
+                            <label for="telefon">Număr de telefon (cu prefix țară)</label>
+                            <input type="tel" id="telefon" name="telefon" placeholder="Ex. +44 7700 900123">
+                            <p class="input-note">Include codul țării (ex. +44 pentru UK). Completează fie telefonul, fie emailul.</p>
+                        </div>
+                        <div class="form-group">
                             <label for="email">Adresă de email</label>
-                            <input type="email" id="email" name="email" placeholder="exemplu@domeniu.com" required>
+                            <input type="email" id="email" name="email" placeholder="exemplu@domeniu.com">
                         </div>
                         <div class="form-group">
                             <label for="tara">Țara de reședință</label>
                             <input type="text" id="tara" name="tara" placeholder="Ex. Italia" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="furnizor">Furnizor Internet</label>
+                            <input type="text" id="furnizor" name="furnizor"
+                                placeholder="Ex. Virgin Media, TIM Italia, Fastweb">
                         </div>
                         <div class="form-group">
                             <label for="mesaj">Mesaj</label>
@@ -601,8 +611,13 @@
                                 placeholder="Spune-ne ce canale urmărești sau ce dispozitiv folosești"></textarea>
                         </div>
                         <button type="submit" class="btn btn--primary">Trimite mesajul</button>
+                        <div class="form-status" role="status" aria-live="polite" aria-atomic="true"
+                            aria-hidden="true">
+                            <i class="fas fa-check-circle" aria-hidden="true"></i>
+                            <span>Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.</span>
+                        </div>
                         <p class="form-note">Prin completarea formularului ești de acord cu prelucrarea datelor pentru a
-                            te contacta.</p>
+                            te contacta. Cel puțin numărul de telefon (cu prefix) sau emailul trebuie completat.</p>
                     </form>
                 </div>
             </div>

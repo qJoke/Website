@@ -343,6 +343,71 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Require at least one contact method in the form
+    const contactForm = document.querySelector('.contact-form form');
+    const phoneInput = document.getElementById('telefon');
+    const emailInput = document.getElementById('email');
+    const statusBox = document.querySelector('.form-status');
+
+    if (contactForm && phoneInput && emailInput) {
+        const validateContactFields = () => {
+            const hasPhone = phoneInput.value.trim().length > 0;
+            const hasEmail = emailInput.value.trim().length > 0;
+            const helperText = 'Completează numărul de telefon (cu prefix) sau adresa de email.';
+
+            if (!hasPhone && !hasEmail) {
+                phoneInput.setCustomValidity(helperText);
+                emailInput.setCustomValidity(helperText);
+            } else {
+                phoneInput.setCustomValidity('');
+                emailInput.setCustomValidity('');
+            }
+        };
+
+        const hideStatus = () => {
+            if (!statusBox) return;
+            statusBox.classList.remove('visible');
+            statusBox.setAttribute('aria-hidden', 'true');
+        };
+
+        const showStatus = (message) => {
+            if (!statusBox) return;
+            const textTarget = statusBox.querySelector('span');
+            if (textTarget) {
+                textTarget.textContent = message;
+            } else {
+                statusBox.textContent = message;
+            }
+            statusBox.classList.add('visible');
+            statusBox.setAttribute('aria-hidden', 'false');
+        };
+
+        phoneInput.addEventListener('input', () => {
+            hideStatus();
+            validateContactFields();
+        });
+        emailInput.addEventListener('input', () => {
+            hideStatus();
+            validateContactFields();
+        });
+
+        contactForm.addEventListener('submit', (event) => {
+            validateContactFields();
+            if (!contactForm.checkValidity()) {
+                event.preventDefault();
+                contactForm.reportValidity();
+                hideStatus();
+                return;
+            }
+
+            event.preventDefault();
+            showStatus('Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.');
+            contactForm.reset();
+            phoneInput.setCustomValidity('');
+            emailInput.setCustomValidity('');
+        });
+    }
+
     // Set current year in footer
     const currentYear = document.getElementById('current-year');
     if (currentYear) {
