@@ -1,10 +1,10 @@
 const useFluidCursor = () => {
   const canvas = document.getElementById('fluid');
-canvas.width = 1920;
-canvas.height = 1080;
+  canvas.width = 1920;
+  canvas.height = 1080;
 
-console.log("Canvas size:", canvas.width, canvas.height);
-  
+  console.log("Canvas size:", canvas.width, canvas.height);
+
   let config = {
     SIM_RESOLUTION: 128,
     DYE_RESOLUTION: 1440,
@@ -22,6 +22,16 @@ console.log("Canvas size:", canvas.width, canvas.height);
     BACK_COLOR: { r: 0.5, g: 0, b: 0 },
     TRANSPARENT: true,
   };
+
+  // Mobile optimization
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    config.SIM_RESOLUTION = 64;
+    config.DYE_RESOLUTION = 512;
+    config.PRESSURE_ITERATIONS = 3;
+    config.SPLAT_FORCE = 6000;
+    config.SPLAT_RADIUS = 0.25;
+    config.SHADING = false;
+  }
   function pointerPrototype() {
     this.id = -1;
     this.texcoordX = 0;
@@ -64,7 +74,7 @@ console.log("Canvas size:", canvas.width, canvas.height);
       halfFloat = gl.getExtension('OES_texture_half_float');
       supportLinearFiltering = gl.getExtension('OES_texture_half_float_linear');
     }
-  gl.clearColor(0.0, 0.0, 0.0, 0.0);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
     const halfFloatTexType = isWebGL2
       ? gl.HALF_FLOAT
       : halfFloat.HALF_FLOAT_OES;
