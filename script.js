@@ -158,78 +158,181 @@ document.addEventListener('DOMContentLoaded', () => {
     const sliderWindow = document.querySelector('.testimonials-window');
     const prevButton = document.querySelector('.slider-btn--prev');
     const nextButton = document.querySelector('.slider-btn--next');
-    const touchModeQuery = typeof window.matchMedia === 'function' ? window.matchMedia('(max-width: 768px)') : null;
-    const isTouchMode = () => (touchModeQuery ? touchModeQuery.matches : false);
 
-    if (sliderTrack) {
+    if (sliderTrack && sliderWindow) {
         const slides = Array.from(sliderTrack.children);
-        let currentIndex = 0;
+        let snapPoints = [];
+        let isDragging = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+        let lastScrollLeft = 0;
+        let lastTimestamp = 0;
+        let velocity = 0;
+        let momentumFrame = null;
+        let scrollSyncFrame = null;
 
-        const computeMetrics = () => {
-            if (slides.length === 0) {
-                return { slideWidth: 0, gapValue: 0, maxIndex: 0 };
+        const stopMomentum = () => {
+            if (momentumFrame) {
+                cancelAnimationFrame(momentumFrame);
+                momentumFrame = null;
             }
-
-            const slideWidth = slides[0].getBoundingClientRect().width;
-            const trackStyles = window.getComputedStyle(sliderTrack);
-            const gapValue = parseFloat(trackStyles.columnGap || trackStyles.gap || '0') || 0;
-            const viewportWidth = sliderWindow?.getBoundingClientRect().width || slideWidth;
-            const visibleCount = Math.max(1, Math.floor((viewportWidth + gapValue) / (slideWidth + gapValue)));
-            const maxIndex = Math.max(0, slides.length - visibleCount);
-
-            return { slideWidth, gapValue, maxIndex };
+            sliderWindow.classList.remove('is-gliding');
         };
 
-        const updateSlider = () => {
-            if (isTouchMode()) {
-                currentIndex = 0;
-                sliderTrack.style.transform = 'none';
-                sliderWindow?.scrollTo({ left: 0, behavior: 'auto' });
-                if (prevButton) prevButton.disabled = true;
-                if (nextButton) nextButton.disabled = true;
-                return;
-            }
+        const getMaxScroll = () => Math.max(0, sliderTrack.scrollWidth - sliderWindow.clientWidth);
+        const clampScroll = (value) => Math.min(Math.max(value, 0), getMaxScroll());
 
-            const { slideWidth, gapValue, maxIndex } = computeMetrics();
-            if (!slideWidth) return;
-
-            currentIndex = Math.min(currentIndex, maxIndex);
-            sliderTrack.style.transform = `translateX(-${currentIndex * (slideWidth + gapValue)}px)`;
-
-            if (prevButton) prevButton.disabled = currentIndex === 0;
-            if (nextButton) nextButton.disabled = currentIndex === maxIndex;
+        const rebuildSnapPoints = () => {
+            const baseOffset = sliderTrack.offsetLeft;
+            const maxScroll = getMaxScroll();
+            snapPoints = [
+                0,
+                ...slides.map(slide => Math.round(slide.offsetLeft - baseOffset)),
+                maxScroll
+            ];
+            snapPoints = [...new Set(snapPoints)].sort((a, b) => a - b);
         };
 
-        const goToSlide = (index) => {
-            if (isTouchMode() || slides.length === 0) return;
-            const { maxIndex } = computeMetrics();
-            currentIndex = Math.min(Math.max(index, 0), maxIndex);
-            updateSlider();
+        const getNearestIndex = (current = sliderWindow.scrollLeft) => {
+            if (snapPoints.length === 0) return 0;
+            return snapPoints.reduce((nearest, point, index) => {
+                return Math.abs(point - current) < Math.abs(snapPoints[nearest] - current) ? index : nearest;
+            }, 0);
         };
 
-        prevButton?.addEventListener('click', () => goToSlide(currentIndex - 1));
-        nextButton?.addEventListener('click', () => goToSlide(currentIndex + 1));
+        const syncButtons = () => {
+            const maxScroll = getMaxScroll();
+            const current = sliderWindow.scrollLeft;
+            if (prevButton) prevButton.disabled = current <= 6;
+            if (nextButton) nextButton.disabled = current >= maxScroll - 6;
+        };
 
-        const handleResize = () => {
-            sliderTrack.style.transition = 'none';
-            updateSlider();
-            requestAnimationFrame(() => {
-                sliderTrack.style.transition = isTouchMode() ? 'none' : '';
+        const queueSyncButtons = () => {
+            if (scrollSyncFrame) return;
+            scrollSyncFrame = requestAnimationFrame(() => {
+                syncButtons();
+                scrollSyncFrame = null;
             });
         };
 
-        window.addEventListener('resize', handleResize);
+        const snapToNearest = () => {
+            if (snapPoints.length === 0) return;
+            const nearest = getNearestIndex();
+            const target = clampScroll(snapPoints[nearest]);
+            sliderWindow.scrollTo({ left: target, behavior: 'smooth' });
+            syncButtons();
+        };
 
-        if (touchModeQuery) {
-            const mediaListener = () => handleResize();
-            if (typeof touchModeQuery.addEventListener === 'function') {
-                touchModeQuery.addEventListener('change', mediaListener);
-            } else if (typeof touchModeQuery.addListener === 'function') {
-                touchModeQuery.addListener(mediaListener);
+        const scrollByStep = (direction) => {
+            stopMomentum();
+            rebuildSnapPoints();
+            if (snapPoints.length === 0) return;
+            const currentIndex = getNearestIndex();
+            const targetIndex = Math.min(Math.max(currentIndex + direction, 0), snapPoints.length - 1);
+            const target = clampScroll(snapPoints[targetIndex]);
+            sliderWindow.scrollTo({ left: target, behavior: 'smooth' });
+            syncButtons();
+        };
+
+        prevButton?.addEventListener('click', () => scrollByStep(-1));
+        nextButton?.addEventListener('click', () => scrollByStep(1));
+
+        const startMomentumScroll = () => {
+            stopMomentum();
+            sliderWindow.classList.add('is-gliding');
+            const friction = 0.94;
+            const minVelocity = 0.005;
+            const maxScroll = getMaxScroll();
+            let currentVelocity = Math.max(Math.min(velocity, 3.5), -3.5);
+            let lastTime = performance.now();
+
+            const step = (now) => {
+                const deltaTime = now - lastTime;
+                lastTime = now;
+                sliderWindow.scrollLeft = clampScroll(sliderWindow.scrollLeft + currentVelocity * deltaTime);
+                currentVelocity *= friction;
+
+                const atEdge = sliderWindow.scrollLeft <= 0 || sliderWindow.scrollLeft >= maxScroll;
+                if (atEdge || Math.abs(currentVelocity) < minVelocity) {
+                    stopMomentum();
+                    snapToNearest();
+                    return;
+                }
+
+                queueSyncButtons();
+                momentumFrame = requestAnimationFrame(step);
+            };
+
+            momentumFrame = requestAnimationFrame(step);
+        };
+
+        const endDrag = (event) => {
+            if (!isDragging) return;
+            isDragging = false;
+            sliderWindow.classList.remove('is-grabbing');
+            sliderWindow.style.scrollBehavior = '';
+
+            if (Math.abs(velocity) < 0.01) {
+                snapToNearest();
+            } else {
+                startMomentumScroll();
             }
-        }
 
-        updateSlider();
+            if (
+                event &&
+                typeof sliderWindow.releasePointerCapture === 'function' &&
+                typeof sliderWindow.hasPointerCapture === 'function' &&
+                sliderWindow.hasPointerCapture(event.pointerId)
+            ) {
+                sliderWindow.releasePointerCapture(event.pointerId);
+            }
+        };
+
+        sliderWindow.addEventListener('pointerdown', (event) => {
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            stopMomentum();
+            rebuildSnapPoints();
+            isDragging = true;
+            startX = event.clientX;
+            startScrollLeft = sliderWindow.scrollLeft;
+            lastScrollLeft = startScrollLeft;
+            lastTimestamp = performance.now();
+            velocity = 0;
+            sliderWindow.classList.add('is-grabbing');
+            sliderWindow.style.scrollBehavior = 'auto';
+            if (typeof sliderWindow.setPointerCapture === 'function') {
+                sliderWindow.setPointerCapture(event.pointerId);
+            }
+        });
+
+        sliderWindow.addEventListener('pointermove', (event) => {
+            if (!isDragging) return;
+            const delta = event.clientX - startX;
+            sliderWindow.scrollLeft = clampScroll(startScrollLeft - delta);
+
+            const now = performance.now();
+            const elapsed = now - lastTimestamp;
+            if (elapsed > 0) {
+                const currentScroll = sliderWindow.scrollLeft;
+                velocity = (currentScroll - lastScrollLeft) / elapsed;
+                lastScrollLeft = currentScroll;
+                lastTimestamp = now;
+            }
+        });
+
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach(type => {
+            sliderWindow.addEventListener(type, endDrag);
+        });
+
+        sliderWindow.addEventListener('scroll', queueSyncButtons, { passive: true });
+        window.addEventListener('resize', () => {
+            stopMomentum();
+            rebuildSnapPoints();
+            sliderWindow.scrollLeft = clampScroll(sliderWindow.scrollLeft);
+            syncButtons();
+        });
+        rebuildSnapPoints();
+        syncButtons();
     }
 
     // WhatsApp chat interactions

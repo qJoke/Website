@@ -729,21 +729,90 @@ a {
 }
 
 .testimonials-window {
-    overflow: hidden;
+    position: relative;
     flex: 1;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding: 0.25rem 0.75rem 0.75rem;
+    mask-image: linear-gradient(90deg, transparent, #fff 6%, #fff 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #fff 6%, #fff 94%, transparent);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(108, 92, 231, 0.6) rgba(255, 255, 255, 0.06);
+    cursor: grab;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.75rem;
+    overscroll-behavior-x: contain;
+    will-change: scroll-position;
+}
+
+.testimonials-window.is-grabbing {
+    cursor: grabbing;
+    user-select: none;
+}
+
+.testimonials-window.is-gliding {
+    cursor: grabbing;
+}
+
+.testimonials-window.is-grabbing .testimonial-card,
+.testimonials-window.is-gliding .testimonial-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.testimonials-window.is-grabbing .testimonial-card {
+    transform: translateY(-3px) scale(0.99);
+}
+
+.testimonials-window.is-gliding .testimonial-card {
+    transform: translateY(-2px);
+}
+
+.testimonials-window::-webkit-scrollbar {
+    height: 8px;
+}
+
+.testimonials-window::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 999px;
+}
+
+.testimonials-window::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--color-primary), #5430ff);
+    border-radius: 999px;
+}
+
+.testimonials-window::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--color-primary-light), #7a6bff);
+}
+
+.testimonials-track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0 0.25rem 0.25rem;
+    min-width: max-content;
 }
 
 
 .testimonial-card {
-    background: rgba(10, 13, 32, 0.75);
+    background: linear-gradient(145deg, rgba(10, 13, 32, 0.9), rgba(22, 26, 50, 0.8));
     border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 2rem 1.75rem;
     display: grid;
     gap: 1.1rem;
-    scroll-snap-align: start;
     min-height: 270px;
+    box-shadow: 0 18px 45px rgba(5, 10, 30, 0.45);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(108, 92, 231, 0.25);
+    box-shadow: 0 24px 55px rgba(76, 92, 231, 0.35);
 }
 
 .testimonial-rating i {
@@ -1315,20 +1384,13 @@ textarea {
     .testimonials-window {
         flex: none;
         width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        padding-bottom: 0.5rem;
-    }
-
-    .testimonials-window::-webkit-scrollbar {
-        display: none;
+        mask-image: none;
+        -webkit-mask-image: none;
+        padding-bottom: 0.75rem;
     }
 
     .testimonials-track {
         min-width: max-content;
-        padding-bottom: 0.5rem;
     }
 
     .testimonials-track>* {
@@ -1456,13 +1518,6 @@ textarea {
 
 
 
-.testimonials-track {
-    display: flex;
-    gap: 1.5rem;
-    transition: transform 0.5s ease;
-}
-
 .testimonials-track>* {
     flex: 0 0 min(320px, 85vw);
-    scroll-snap-align: start;
 }
