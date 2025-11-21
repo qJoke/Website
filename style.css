@@ -273,7 +273,7 @@ a {
 .hero-section {
     position: relative;
     padding: 6.5rem 0;
-    background: url('background.webp') center/cover no-repeat;
+    background: url('background2.webp') center/cover no-repeat;
     min-height: 90vh;
     display: flex;
     align-items: center;
