@@ -341,6 +341,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeChatBtn = document.getElementById('close-chat-btn');
     const sendMessageBtn = document.getElementById('send-whatsapp-message');
     const whatsappTextarea = document.getElementById('whatsapp-message');
+    const whatsappNumber = '972555171043';
+
+    const openWhatsAppWithMessage = (message) => {
+        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    };
 
     whatsappBubble?.addEventListener('click', () => {
         if (whatsappWindow) {
@@ -360,13 +366,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!whatsappTextarea) return;
         const message = whatsappTextarea.value.trim();
         if (message.length === 0) return;
-        const url = `https://wa.me/972555171043?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
+        openWhatsAppWithMessage(message);
         whatsappTextarea.value = '';
         whatsappWindow?.setAttribute('aria-hidden', 'true');
         if (whatsappWindow) {
             whatsappWindow.style.display = 'none';
         }
+    });
+
+    const planButtons = document.querySelectorAll('.js-whatsapp-plan');
+
+    planButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            const card = button.closest('.pricing-card');
+            const planName = card?.querySelector('.plan-name')?.textContent.trim() || 'abonamentul Pixel Magix';
+            const duration = card?.querySelector('.price-duration')?.textContent.trim() || '';
+            const price = card?.querySelector('.price-value')?.textContent.trim() || '';
+            const durationPart = duration ? ` (${duration})` : '';
+            const pricePart = price ? ` la ${price}` : '';
+            const message = `Salut! Vreau sa activez pachetul ${planName}${durationPart}${pricePart}. Imi puteti trimite detaliile si pasii de plata?`;
+            openWhatsAppWithMessage(message);
+        });
     });
 
     // Sidebar functionality
