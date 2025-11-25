@@ -1109,6 +1109,32 @@ textarea {
     cursor: pointer;
 }
 
+.newsletter-form button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.newsletter-status {
+    min-height: 1.2em;
+    margin: 0 0 0.75rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    transition: color 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.newsletter-status.visible {
+    opacity: 1;
+}
+
+.newsletter-status.success {
+    color: var(--color-secondary);
+}
+
+.newsletter-status.error {
+    color: var(--color-accent);
+}
+
 .footer-bottom {
     text-align: center;
     margin-top: 2.5rem;

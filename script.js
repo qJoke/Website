@@ -575,6 +575,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Newsletter fake confirmation message
+    const newsletterForm = document.querySelector('.newsletter-form');
+    const newsletterInput = newsletterForm ? newsletterForm.querySelector('input[type="email"]') : null;
+    const newsletterButton = newsletterForm ? newsletterForm.querySelector('button[type="submit"]') : null;
+    const newsletterStatus = document.querySelector('.newsletter-status');
+    let newsletterTimeout = null;
+
+    if (newsletterForm && newsletterInput && newsletterButton && newsletterStatus) {
+        const setNewsletterMessage = (message, type = 'success') => {
+            newsletterStatus.textContent = message;
+            newsletterStatus.classList.remove('success', 'error');
+            newsletterStatus.classList.add(type, 'visible');
+        };
+
+        const setNewsletterSending = (isSending) => {
+            newsletterButton.disabled = isSending;
+            newsletterButton.innerHTML = isSending
+                ? '<i class="fas fa-spinner fa-spin"></i>'
+                : '<i class="fas fa-paper-plane"></i>';
+        };
+
+        newsletterForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const emailValue = newsletterInput.value.trim();
+            if (newsletterTimeout) {
+                clearTimeout(newsletterTimeout);
+                newsletterTimeout = null;
+            }
+
+            if (emailValue.length === 0 || !emailValue.includes('@')) {
+                setNewsletterMessage('Adaug\u0103 un email valid ca s\u0103 \u00eencheiem abonarea.', 'error');
+                newsletterInput.focus();
+                return;
+            }
+
+            setNewsletterMessage('Se proceseaz\u0103 abonarea...', 'success');
+            setNewsletterSending(true);
+
+            newsletterTimeout = window.setTimeout(() => {
+                setNewsletterMessage('Gata! Am trimis o confirmare (demo) \u00een inbox. Mul\u021bumim!', 'success');
+                newsletterForm.reset();
+                setNewsletterSending(false);
+            }, 900);
+        });
+    }
+
     // Set current year in footer
     const currentYear = document.getElementById('current-year');
     if (currentYear) {
