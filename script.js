@@ -342,11 +342,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendMessageBtn = document.getElementById('send-whatsapp-message');
     const whatsappTextarea = document.getElementById('whatsapp-message');
     const whatsappNumber = '972555171043';
+    const whatsappDefaultMessage = 'Salut! Sunt interesat de abonamentele Pixel Magix TV. Vreau sa aflu detalii si sa primesc un test gratuit de 24h. Multumesc!';
 
-    const openWhatsAppWithMessage = (message) => {
-        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const openWhatsAppWithMessage = (message = whatsappDefaultMessage) => {
+        const finalMessage = (message || '').trim() || whatsappDefaultMessage;
+        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(finalMessage)}`;
         window.open(url, '_blank');
     };
+
+    const whatsappLinks = document.querySelectorAll('a[href^="https://wa.me/972555171043"]:not(.js-whatsapp-plan)');
+    const defaultWhatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappDefaultMessage)}`;
+
+    whatsappLinks.forEach(link => {
+        try {
+            const url = new URL(link.href);
+            url.searchParams.set('text', whatsappDefaultMessage);
+            link.href = url.toString();
+        } catch (error) {
+            link.href = defaultWhatsappUrl;
+        }
+    });
 
     whatsappBubble?.addEventListener('click', () => {
         if (whatsappWindow) {
