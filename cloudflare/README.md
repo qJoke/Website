@@ -16,10 +16,13 @@ Editing the files does not update the public site until Wrangler is deployed.
   and 301 HTTP-to-HTTPS redirects preserving the path and query. Geo HEAD has
   an empty body and POST returns 405. All six pinned SRI resources verified.
 - Cloudflare **Always Use HTTPS** is enabled by the owner and verified live.
-  The owner restored **Full** TLS after **Full (strict)** produced a 526 error.
-  GitHub's Pages API still reports no domain certificate, and a direct TLS
-  check against the GitHub origin found a hostname mismatch. Do not enable
-  strict mode until the domain certificate is provisioned and verified.
+  GitHub's domain certificate is now **approved** for the apex and `www`,
+  expiring on **2026-12-09**. Direct TLS checks passed on all four GitHub IPv4
+  addresses for both hostnames. **Enforce HTTPS** is enabled in GitHub Pages.
+  The owner confirmed restoring the proxy and activating **Full (strict)**.
+  Final live checks passed: both DNS names resolve through Cloudflare, the apex
+  returns 200 with the security headers, and www redirects to the apex.
+  The SSL mode itself was confirmed by the owner because OAuth cannot read it.
 - The route's `request_limit_fail_open` setting is **true**, verified through
   the Cloudflare API. If the Worker request quota is exhausted, the static
   origin remains available, but Worker-added headers and geo handling are
@@ -28,26 +31,50 @@ Editing the files does not update the public site until Wrangler is deployed.
   no subscription was purchased or changed. Recheck the route's failure mode
   after future deployments. This Worker does not enforce authentication.
 - Wrangler's OAuth grant permits Worker deployment but not zone settings or
-  DNS inspection. The origin certificate/DNS investigation remains unfinished.
+  DNS inspection. DNS was corrected by the owner and the origin certificate
+  was provisioned as described below.
   Browser interaction was tested locally before deployment; live visual
   retesting was unavailable because Chrome automation failed and Computer Use
   does not support URL-policy enforcement for this Firefox session.
 
-### DNS correction identified; not yet applied
+### DNS correction applied by the owner
 
 The owner's Cloudflare screenshot shows the four correct GitHub Pages apex A
 records plus eight records using Cloudflare edge IPs as origin addresses:
 `104.21.78.46`, `172.67.216.148`, `2606:4700:3036::ac43:d894`, and
 `2606:4700:3035::6815:4e2e`, each on both the apex and `www`. These are invalid
-origin targets for the proxied site. The proposed correction is to remove only
-those eight records and add a proxied `www` CNAME to `qjoke.github.io`, retaining
-the four GitHub A records and every MX/TXT record. The owner has been notified
-of the proposed removals. No DNS changes have been made by this agent.
+origin targets for the proxied site. After being notified of the exact eight
+removals, the owner applied the correction and supplied a second screenshot:
+the apex retains the four GitHub A records and `www` is now a proxied CNAME to
+`qjoke.github.io`. The MX and TXT records remain present. No DNS changes were
+made through the agent's tools.
 
-Keep the orange proxy enabled and TLS on Full during this correction. Recheck
-both hostnames and GitHub certificate provisioning afterwards. Do not promise
-that correcting these records alone will resolve certificate issuance or
-switch to strict mode without a successful origin certificate check.
+Live verification after the correction found HTTPS 200 on the apex and an
+HTTPS 301 redirect from `www` to the apex, retaining path/query. Both HTTP
+hostnames redirect to HTTPS. The apex still supplies the deployed CSP/HSTS.
+
+### Origin certificate provisioned
+
+With the proxy enabled, GitHub's DNS health check reported valid hostnames but
+`is_https_eligible: false`. The owner approved a maintenance window with a
+possible HTTPS interruption and temporarily set the four apex A records and
+the www CNAME to DNS-only. Authoritative DNS and GitHub then verified both
+hostnames as HTTPS-eligible, with no CAA errors.
+
+Resaving the unchanged domain did not start issuance. After notifying the
+owner, the Pages domain association was removed and immediately restored via
+the documented API procedure. The source remained `main` at `/`, and the final
+`CNAME` file hash is unchanged. GitHub generated commits `52a58a8` (Delete CNAME)
+and `784416a` (Create CNAME); the final build succeeded.
+
+The resulting certificate is approved for `pixelmagix.shop` and
+`www.pixelmagix.shop`, expiring 2026-12-09. All eight direct origin checks
+(two hostnames, four GitHub IPv4 addresses) passed trust/hostname validation
+and returned the intended page/redirect. GitHub Pages HTTPS enforcement was
+then enabled. The owner restored all five proxy switches and confirmed
+activating Full (strict). Authoritative DNS, public HTTPS responses, Worker
+headers and the geo endpoint were verified after that restoration. The final
+Pages build `34516295691` for commit `784416a` completed successfully.
 
 ## Route and origin
 
@@ -63,10 +90,9 @@ unchanged. Use a **Worker Route**, not a Worker Custom Domain: the wrapper needs
 the existing origin behind the route. All origin bodies are streamed unchanged;
 status codes, redirects, cache directives and validators are retained.
 
-The worker accepts only `pixelmagix.shop`. The `www` hostname was not in the
-existing Worker configuration and returned 403 during the audit. It is not
-silently added to this route. Check its intended DNS/canonical redirect in
-Cloudflare separately before changing that hostname.
+The worker accepts only `pixelmagix.shop`. The `www` hostname remains outside
+the Worker route. Its initial 403 was resolved by the owner's DNS correction;
+GitHub Pages now redirects it to the canonical apex.
 
 ## Behavior
 
