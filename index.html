@@ -40,7 +40,7 @@
     <link rel="icon" type="image/webp" href="Pixel%20Magix.webp">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/css/intlTelInput.css"
         integrity="sha384-KgNFOuU4mTPtXZmFu6WaY2/jxbJEA+INAC2SFk+B0vTR9iuuKE+5qujIZY8Mnmzt" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css?v=responsive-security-2026-09-10">
+    <link rel="stylesheet" href="style.css?v=install-apps-2026-09-10">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet"
@@ -298,8 +298,9 @@
                     <a href="#instalare" data-install-target="lg"><i class="fas fa-desktop"></i> LG webOS</a>
                     <a href="#instalare" data-install-target="android"><i class="fab fa-android"></i> Android / Fire
                         TV</a>
-                    <a href="#instalare" data-install-target="apple"><i class="fab fa-apple"></i> Apple / iOS</a>
+                    <a href="#instalare" data-install-target="mobile"><i class="fas fa-mobile-screen-button"></i> Telefoane</a>
                     <a href="#instalare" data-install-target="windows"><i class="fab fa-windows"></i> Windows</a>
+                    <a href="#instalare" data-install-target="mac"><i class="fab fa-apple"></i> Mac</a>
                 </div>
             </div>
         </section>
@@ -726,7 +727,10 @@
                     <div class="faq-item">
                         <button class="faq-question">Ce aplicații recomandă Pixel Magix?</button>
                         <div class="faq-answer">
-                            <p>BMC sau XCloud TV. La cerere, îți configurăm de la distanță aplicația preferată.</p>
+                            <p>Hot Player pentru Samsung TV, LG TV, Apple TV și telefoane Android sau iPhone.
+                                Signal Player pentru Android TV, Amazon Fire TV, Windows și Mac cu Apple Silicon;
+                                pe telefoanele Android îl poți instala și prin APK.
+                                La cerere, te ajutăm cu instalarea și configurarea.</p>
                         </div>
                     </div>
                 </div>
@@ -832,89 +836,122 @@
                 </div>
                 <div class="install-grid">
                     <article class="install-card" data-install="samsung" data-aos="fade-up">
-                        <div class="install-card__media brand-samsung">
-                            <img src="samsung.webp" alt="Banner aplicație Samsung TV" width="400" height="225" loading="lazy" decoding="async">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fas fa-tv"></i></span>
+                            <img class="install-hot-player-logo" src="hot-player.png" alt="Hot Player" loading="lazy"
+                                width="419" height="200" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>Samsung TV</h3>
-                            <p>Deschideți secțiunea "Apps" pe televizorul dvs. Samsung și căutați aplicația BMC sau,
-                                dacă nu o aveți, căutați aplicația XCloudTV.</p>
+                            <span class="install-platform-label">Smart TV · Tizen</span>
+                            <p>Deschide secțiunea <strong>Apps</strong> de pe televizorul Samsung, caută
+                                <strong>Hot Player</strong> și instalează aplicația.</p>
                             <div class="install-card__footer">
-                                <div class="install-app-logos" aria-label="Aplicații recomandate">
-                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40" decoding="async">
-                                    <img src="xcloudtv logo.webp" alt="Siglă aplicație XCloudTV" loading="lazy" width="120"
-                                        height="40" decoding="async">
-                                </div>
+                                <span class="install-store-hint"><i class="fas fa-store" aria-hidden="true"></i> Disponibil în Apps pe televizor</span>
                             </div>
                         </div>
                     </article>
                     <article class="install-card" data-install="lg" data-aos="fade-up" data-aos-delay="100">
-                        <div class="install-card__media brand-lg">
-                            <img src="lg.webp" alt="Banner aplicație LG TV" width="400" height="225" loading="lazy" decoding="async">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fas fa-display"></i></span>
+                            <img class="install-hot-player-logo" src="hot-player.png" alt="Hot Player" loading="lazy"
+                                width="419" height="200" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>LG TV</h3>
-                            <p>Deschide LG Content Store pe televizorul dvs. și caută aplicația BMC sau, dacă nu o
-                                aveți, caută aplicația XCloudTV.</p>
+                            <span class="install-platform-label">Smart TV · webOS</span>
+                            <p>Deschide <strong>LG Content Store</strong> pe televizor, caută
+                                <strong>Hot Player</strong> și instalează aplicația.</p>
                             <div class="install-card__footer">
-                                <div class="install-app-logos" aria-label="Aplicații recomandate">
-                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40" decoding="async">
-                                    <img src="xcloudtv logo.webp" alt="Siglă aplicație XCloudTV" loading="lazy" width="120"
-                                        height="40" decoding="async">
-                                </div>
+                                <span class="install-store-hint"><i class="fas fa-store" aria-hidden="true"></i> Disponibil în LG Content Store</span>
                             </div>
                         </div>
                     </article>
                     <article class="install-card" data-install="android" data-aos="fade-up" data-aos-delay="200">
-                        <div class="install-card__media brand-android">
-                            <img src="amazon2.webp" alt="Banner Android TV și Amazon Fire TV" width="400" height="225" loading="lazy" decoding="async">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fab fa-android"></i></span>
+                            <span class="install-app-badge"><i class="fas fa-play" aria-hidden="true"></i> Signal Player</span>
                         </div>
                         <div class="install-card__body">
                             <h3>Android TV și Amazon Fire TV</h3>
-                            <p>În aplicația Downloader, introduceți codul: <strong>694419</strong></p>
-                            <p>Sau puteți descărca direct fișierul APK.</p>
+                            <span class="install-platform-label">Smart TV · TV box · Fire TV Stick</span>
+                            <p>În aplicația <strong>Downloader</strong>, introdu codul de mai jos pentru a instala Signal Player.</p>
+                            <div class="install-code-panel">
+                                <span>Cod Downloader</span>
+                                <strong class="install-downloader-code">5882191</strong>
+                            </div>
                             <div class="install-card__footer">
                                 <div class="install-actions">
-                                    <a class="btn btn--primary" href="https://app.bmcmedia.tv/BMC-Media.apk"
-                                        target="_blank" rel="noopener">Descarcă</a>
+                                    <span class="install-note">Sau instalează direct fișierul APK</span>
+                                    <a class="btn btn--primary" href="https://signal-player.com/signal.apk"
+                                        target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> Descarcă APK</a>
                                 </div>
                             </div>
                         </div>
                     </article>
-                    <article class="install-card" data-install="apple" data-aos="fade-up" data-aos-delay="300">
-                        <div class="install-card__media brand-apple">
-                            <img src="apple.webp" alt="Banner Apple și iOS" width="400" height="225" loading="lazy" decoding="async">
+                    <article class="install-card" data-install="mobile" data-aos="fade-up">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fas fa-mobile-screen-button"></i></span>
+                            <img class="install-hot-player-logo" src="hot-player.png" alt="Hot Player" loading="lazy"
+                                width="419" height="200" decoding="async">
                         </div>
                         <div class="install-card__body">
-                            <h3>Apple / iOS</h3>
-                            <p>Deschide App Store pe televizorul sau telefonul dvs. iOS și căutați aplicația XCloud Mobile
-                            </p>
+                            <h3>Telefoane Android și iPhone</h3>
+                            <span class="install-platform-label">Google Play · App Store</span>
+                            <p>Caută <strong>Hot Player</strong> în Google Play pe Android sau în App Store pe iPhone
+                                și instalează aplicația.</p>
+                            <p>Pe <strong>Android</strong>, poți alege și Signal Player, prin fișierul APK.</p>
                             <div class="install-card__footer">
-                                <div class="install-app-logos" aria-label="Aplicație recomandată">
-                                    <img src="xcloud mobile logo.webp" alt="Siglă aplicație XCloud Mobile" loading="lazy"
-                                        width="140" height="40" decoding="async">
+                                <div class="install-actions">
+                                    <span class="install-note">Alternativă pentru telefoanele Android</span>
+                                    <a class="btn btn--primary" href="https://signal-player.com/signal.apk"
+                                        target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> APK pentru Android</a>
                                 </div>
                             </div>
                         </div>
                     </article>
-                    <article class="install-card" data-install="windows" data-aos="fade-up" data-aos-delay="400">
-                        <div class="install-card__media brand-windows">
-                            <img src="windows.webp" alt="Banner aplicație Windows" width="400" height="225" loading="lazy" decoding="async">
+                    <article class="install-card" data-install="windows" data-aos="fade-up" data-aos-delay="100">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fab fa-windows"></i></span>
+                            <span class="install-app-badge"><i class="fas fa-play" aria-hidden="true"></i> Signal Player</span>
                         </div>
                         <div class="install-card__body">
                             <h3>Windows 10/11</h3>
-                            <p>Descarcă aplicația</p>
+                            <span class="install-platform-label">PC · Laptop</span>
+                            <p>Descarcă <strong>Signal Player</strong> pentru PC sau laptop, deschide fișierul
+                                <strong>.exe</strong> și urmează pașii de instalare.</p>
                             <div class="install-card__footer">
-                                <span class="install-note">Link Windows actual - actualizăm dacă este necesar alt
-                                    kit.</span>
                                 <div class="install-actions">
-                                    <a class="btn btn--primary" href="https://app.bmcmedia.tv/BMC-Beta.exe"
-                                        target="_blank" rel="noopener">Descarcă</a>
+                                    <span class="install-note">Kit de instalare .exe</span>
+                                    <a class="btn btn--primary" href="https://signal-player.com/signal.exe"
+                                        target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> Descarcă pentru Windows</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="install-card" data-install="mac" data-aos="fade-up" data-aos-delay="200">
+                        <div class="install-card__top">
+                            <span class="install-platform-icon" aria-hidden="true"><i class="fab fa-apple"></i></span>
+                            <span class="install-app-badge"><i class="fas fa-play" aria-hidden="true"></i> Signal Player</span>
+                        </div>
+                        <div class="install-card__body">
+                            <h3>Mac cu Apple Silicon</h3>
+                            <span class="install-platform-label">macOS · Laptop și desktop</span>
+                            <p>Descarcă <strong>Signal Player</strong> pentru macOS și deschide fișierul
+                                <strong>.dmg</strong> pentru instalare.</p>
+                            <p>Pentru MacBook, iMac, Mac mini și alte Mac-uri cu procesor Apple Silicon.</p>
+                            <div class="install-card__footer">
+                                <div class="install-actions">
+                                    <span class="install-note">Kit de instalare .dmg · Apple Silicon</span>
+                                    <a class="btn btn--primary" href="https://signal-player.com/signal.dmg"
+                                        target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> Descarcă pentru Mac</a>
                                 </div>
                             </div>
                         </div>
                     </article>
                 </div>
+                <p class="install-apple-tv-note"><i class="fab fa-apple" aria-hidden="true"></i>
+                    <span>Folosești <strong>Apple TV</strong>? Caută <strong>Hot Player</strong> în App Store și instalează aplicația.</span></p>
             </div>
         </section>
     </main>
@@ -1009,7 +1046,7 @@
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/js/intlTelInput.min.js"
         integrity="sha384-MaP+WODIptSC7Wk4y9Nk8mXLNQ6IqnRFPz1xfc40J25Tr215Ll4YjcBXEPxjiFhG"
         crossorigin="anonymous" defer></script>
-    <script src="script.js?v=responsive-security-2026-09-10" defer></script>
+    <script src="script.js?v=install-apps-2026-09-10" defer></script>
 </body>
 
 </html>

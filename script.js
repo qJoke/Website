@@ -1362,7 +1362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (installSection) {
                 event.preventDefault();
-                installSection.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                (targetCard || installSection).scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
             }
 
             if (targetCard) {
