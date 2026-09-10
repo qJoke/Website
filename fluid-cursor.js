@@ -2,28 +2,45 @@ const useFluidCursor = () => {
   const canvas = document.getElementById('fluid');
   if (!canvas) return;
 
-  // Device detection (do this first before setting canvas size)
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobileQuery = window.matchMedia('(max-width: 768px)');
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let dispose = null;
+  let contextLost = false;
 
-  // Completely disable fluid cursor on mobile phones or for reduced motion
-  if (isMobile || prefersReducedMotion) {
-    canvas.style.display = 'none';
-    console.log("Fluid cursor disabled (mobile or reduced motion)");
-    return;
+  function syncEligibility() {
+    const enabled = !mobileQuery.matches && !reducedMotionQuery.matches && !contextLost;
+    if (!enabled && dispose) {
+      dispose();
+      dispose = null;
+    }
+    canvas.style.display = enabled ? '' : 'none';
+    if (enabled && !dispose) dispose = createFluidCursor(canvas);
   }
+
+  mobileQuery.addEventListener('change', syncEligibility);
+  reducedMotionQuery.addEventListener('change', syncEligibility);
+  canvas.addEventListener('webglcontextlost', (event) => {
+    event.preventDefault();
+    contextLost = true;
+    syncEligibility();
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    contextLost = false;
+    syncEligibility();
+  });
+  syncEligibility();
+};
+
+function createFluidCursor(canvas) {
   const isLowPowerDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
-
-  // Set initial canvas size based on device (will be resized by resizeCanvas later)
-  if (isMobile) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  } else {
-    canvas.width = 1920;
-    canvas.height = 1080;
-  }
-
-  console.log("Fluid cursor initialized - Mobile:", isMobile, "Canvas:", canvas.width + "x" + canvas.height);
+  const textures = new Set();
+  const framebuffers = new Set();
+  const shaders = new Set();
+  const programs = new Set();
+  const buffers = new Set();
+  const eventController = new AbortController();
+  let pixelRatio = 1;
+  resizeCanvas();
 
   let config = {
     SIM_RESOLUTION: 128,
@@ -43,28 +60,11 @@ const useFluidCursor = () => {
     TRANSPARENT: true,
   };
 
-  // Comprehensive mobile optimization
-  if (isMobile) {
-    config.SIM_RESOLUTION = 64;
-    config.DYE_RESOLUTION = 384;           // Reduced from 512 for better performance
-    config.PRESSURE_ITERATIONS = 3;
-    config.SPLAT_FORCE = 6000;
-    config.SPLAT_RADIUS = 0.25;
-    config.SHADING = false;
-    config.CURL = 8;                       // Reduced from 12 for less GPU work
-    config.VELOCITY_DISSIPATION = 4.5;     // Increased for faster fade (less work)
-    config.DENSITY_DISSIPATION = 4;        // Increased for faster fade
-  }
-
   // Additional optimization for low-power devices (even on desktop)
-  if (isLowPowerDevice && !isMobile) {
+  if (isLowPowerDevice) {
     config.DYE_RESOLUTION = 1024;
     config.PRESSURE_ITERATIONS = 15;
   }
-
-  // Frame rate throttling for mobile (target ~30fps instead of 60fps)
-  let frameSkip = isMobile ? 1 : 0;  // Skip every other frame on mobile
-  let frameCount = 0;
 
   // Dynamic quality adjustment based on performance
   let performanceHistory = [];
@@ -92,6 +92,7 @@ const useFluidCursor = () => {
     return;
   }
   const { gl, ext } = webglContext;
+  const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
   if (!ext.supportLinearFiltering) {
     config.DYE_RESOLUTION = 256;
     config.SHADING = false;
@@ -198,6 +199,8 @@ const useFluidCursor = () => {
       0
     );
     const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    gl.deleteTexture(texture);
+    gl.deleteFramebuffer(fbo);
     return status == gl.FRAMEBUFFER_COMPLETE;
   }
   class Material {
@@ -241,6 +244,7 @@ const useFluidCursor = () => {
   }
   function createProgram(vertexShader, fragmentShader) {
     let program = gl.createProgram();
+    programs.add(program);
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
@@ -260,6 +264,7 @@ const useFluidCursor = () => {
   function compileShader(type, source, keywords) {
     source = addKeywords(source, keywords);
     const shader = gl.createShader(type);
+    shaders.add(shader);
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
@@ -622,13 +627,17 @@ const useFluidCursor = () => {
    `
   );
   const blit = (() => {
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    const vertexBuffer = gl.createBuffer();
+    buffers.add(vertexBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
       new Float32Array([-1, -1, -1, 1, 1, 1, 1, -1]),
       gl.STATIC_DRAW
     );
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, gl.createBuffer());
+    const indexBuffer = gl.createBuffer();
+    buffers.add(indexBuffer);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(
       gl.ELEMENT_ARRAY_BUFFER,
       new Uint16Array([0, 1, 2, 0, 2, 3]),
@@ -716,6 +725,12 @@ const useFluidCursor = () => {
         texType,
         filtering
       );
+    deleteFBO(divergence);
+    deleteFBO(curl);
+    if (pressure) {
+      deleteFBO(pressure.read);
+      deleteFBO(pressure.write);
+    }
     divergence = createFBO(
       simRes.width,
       simRes.height,
@@ -744,6 +759,7 @@ const useFluidCursor = () => {
   function createFBO(w, h, internalFormat, format, type, param) {
     gl.activeTexture(gl.TEXTURE0);
     let texture = gl.createTexture();
+    textures.add(texture);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, param);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, param);
@@ -761,6 +777,7 @@ const useFluidCursor = () => {
       null
     );
     let fbo = gl.createFramebuffer();
+    framebuffers.add(fbo);
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
     gl.framebufferTexture2D(
       gl.FRAMEBUFFER,
@@ -819,6 +836,7 @@ const useFluidCursor = () => {
     copyProgram.bind();
     gl.uniform1i(copyProgram.uniforms.uTexture, target.attach(0));
     blit(newFBO);
+    deleteFBO(target);
     return newFBO;
   }
   function resizeDoubleFBO(target, w, h, internalFormat, format, type, param) {
@@ -832,6 +850,7 @@ const useFluidCursor = () => {
       type,
       param
     );
+    deleteFBO(target.write);
     target.write = createFBO(w, h, internalFormat, format, type, param);
     target.width = w;
     target.height = h;
@@ -839,8 +858,16 @@ const useFluidCursor = () => {
     target.texelSizeY = 1.0 / h;
     return target;
   }
+  function deleteFBO(target) {
+    if (!target) return;
+    gl.deleteTexture(target.texture);
+    gl.deleteFramebuffer(target.fbo);
+    textures.delete(target.texture);
+    framebuffers.delete(target.fbo);
+  }
   function createTextureAsync(url) {
     let texture = gl.createTexture();
+    textures.add(texture);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -884,23 +911,73 @@ const useFluidCursor = () => {
   }
   updateKeywords();
   initFramebuffers();
-  let lastUpdateTime = Date.now();
+  let lastUpdateTime = performance.now();
   let colorUpdateTimer = 0.0;
-  function update() {
-    const dt = calcDeltaTime();
+  let animationFrame = null;
+  let idleSimulationTime = 0;
+  let needsClear = false;
+  let disposed = false;
+  let pageActive = true;
+  let pointerInitialized = false;
+  let pendingClick = false;
+  // Four seconds of simulated decay leaves no visible trail at the current dissipation.
+  const TRAIL_FADE_SECONDS = 4;
 
-    // Frame rate throttling for mobile - skip frames to target ~30fps
-    if (frameSkip > 0) {
-      frameCount++;
-      if (frameCount % (frameSkip + 1) !== 0) {
-        requestAnimationFrame(update);
-        return;
-      }
+  function canRun() {
+    return !disposed && pageActive && !document.hidden && !gl.isContextLost();
+  }
+
+  function wake() {
+    if (!canRun()) return false;
+    if (animationFrame === null) {
+      if (resizeCanvas()) initFramebuffers();
+      if (needsClear) clearSimulation();
+      lastUpdateTime = performance.now();
+      performanceHistory.length = 0;
+      animationFrame = requestAnimationFrame(update);
     }
+    idleSimulationTime = 0;
+    return true;
+  }
+
+  function stop() {
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+    needsClear = true;
+    pendingClick = false;
+    resetAllPointers();
+    if (!gl.isContextLost()) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+  }
+
+  function clearSimulation() {
+    gl.clearColor(0, 0, 0, 0);
+    for (const framebuffer of framebuffers) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    needsClear = false;
+  }
+
+  function update(now) {
+    animationFrame = null;
+    if (!canRun()) {
+      stop();
+      return;
+    }
+    const elapsed = (now - lastUpdateTime) / 1000;
+    lastUpdateTime = now;
+    const dt = Math.min(Math.max(elapsed, 0), 0.016666);
 
     // Dynamic quality adjustment based on actual performance
-    if (dt > 0) {
-      const fps = 1 / dt;
+    // Measure the raw frame interval; the capped simulation dt always implied >= 60 fps.
+    if (elapsed > 0 && !qualityReduced) {
+      const fps = 1 / elapsed;
       performanceHistory.push(fps);
       if (performanceHistory.length > PERFORMANCE_SAMPLE_SIZE) {
         performanceHistory.shift();
@@ -925,18 +1002,18 @@ const useFluidCursor = () => {
     applyInputs();
     step(dt);
     render(null);
-    requestAnimationFrame(update);
-  }
-  function calcDeltaTime() {
-    let now = Date.now();
-    let dt = (now - lastUpdateTime) / 1000;
-    dt = Math.min(dt, 0.016666);
-    lastUpdateTime = now;
-    return dt;
+    idleSimulationTime += dt;
+    if (idleSimulationTime >= TRAIL_FADE_SECONDS) stop();
+    else animationFrame = requestAnimationFrame(update);
   }
   function resizeCanvas() {
-    let width = scaleByPixelRatio(canvas.clientWidth);
-    let height = scaleByPixelRatio(canvas.clientHeight);
+    const cssWidth = Math.max(1, canvas.clientWidth || window.innerWidth);
+    const cssHeight = Math.max(1, canvas.clientHeight || window.innerHeight);
+    // This soft overlay gains little above 2x DPR or a 4K drawing buffer.
+    pixelRatio = Math.min(window.devicePixelRatio || 1, 2,
+      Math.sqrt((3840 * 2160) / (cssWidth * cssHeight)));
+    let width = Math.max(1, scaleByPixelRatio(cssWidth));
+    let height = Math.max(1, scaleByPixelRatio(cssHeight));
     if (canvas.width != width || canvas.height != height) {
       canvas.width = width;
       canvas.height = height;
@@ -954,6 +1031,10 @@ const useFluidCursor = () => {
     }
   }
   function applyInputs() {
+    if (pendingClick) {
+      pendingClick = false;
+      clickSplat(pointers[0]);
+    }
     pointers.forEach((p) => {
       if (p.moved) {
         p.moved = false;
@@ -1118,44 +1199,32 @@ const useFluidCursor = () => {
     if (aspectRatio > 1) radius *= aspectRatio;
     return radius;
   }
-  window.addEventListener('mousedown', (e) => {
-    let pointer = pointers[0];
-    let posX = scaleByPixelRatio(e.clientX);
-    let posY = scaleByPixelRatio(e.clientY);
+  function listen(target, type, handler) {
+    target.addEventListener(type, handler, { passive: true, signal: eventController.signal });
+  }
+  listen(window, 'mousedown', (e) => {
+    if (!wake()) return;
+    const pointer = pointers[0];
+    const posX = scaleByPixelRatio(e.clientX);
+    const posY = scaleByPixelRatio(e.clientY);
     updatePointerDownData(pointer, -1, posX, posY);
-    clickSplat(pointer);
+    pendingClick = true;
   });
-  document.body.addEventListener('mousemove', function handleFirstMouseMove(e) {
-    let pointer = pointers[0];
-    let posX = scaleByPixelRatio(e.clientX);
-    let posY = scaleByPixelRatio(e.clientY);
-    let color = generateColor();
-    update();
-    updatePointerMoveData(pointer, posX, posY, color);
-    document.body.removeEventListener('mousemove', handleFirstMouseMove);
-  });
-  window.addEventListener('mousemove', (e) => {
-    let pointer = pointers[0];
-    let posX = scaleByPixelRatio(e.clientX);
-    let posY = scaleByPixelRatio(e.clientY);
-    let color = pointer.color;
-    updatePointerMoveData(pointer, posX, posY, color);
-  });
-  document.body.addEventListener(
-    'touchstart',
-    function handleFirstTouchStart(e) {
-      const touches = e.targetTouches;
-      let pointer = pointers[0];
-      for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
-        update();
-        updatePointerDownData(pointer, touches[i].identifier, posX, posY);
-      }
-      document.body.removeEventListener('touchstart', handleFirstTouchStart);
+  listen(window, 'mousemove', (e) => {
+    if (!wake()) return;
+    const pointer = pointers[0];
+    const posX = scaleByPixelRatio(e.clientX);
+    const posY = scaleByPixelRatio(e.clientY);
+    if (!pointerInitialized) {
+      updatePointerDownData(pointer, -1, posX, posY);
+      pointer.down = false;
+      return;
     }
-  );
-  window.addEventListener('touchstart', (e) => {
+    updatePointerMoveData(pointer, posX, posY, pointer.color);
+  });
+  listen(window, 'mouseup', () => updatePointerUpData(pointers[0]));
+  listen(window, 'touchstart', (e) => {
+    if (!wake()) return;
     const touches = e.targetTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
@@ -1164,20 +1233,18 @@ const useFluidCursor = () => {
       updatePointerDownData(pointer, touches[i].identifier, posX, posY);
     }
   });
-  window.addEventListener(
-    'touchmove',
-    (e) => {
-      const touches = e.targetTouches;
-      let pointer = pointers[0];
-      for (let i = 0; i < touches.length; i++) {
-        let posX = scaleByPixelRatio(touches[i].clientX);
-        let posY = scaleByPixelRatio(touches[i].clientY);
-        updatePointerMoveData(pointer, posX, posY, pointer.color);
-      }
-    },
-    false
-  );
-  window.addEventListener('touchend', (e) => {
+  listen(window, 'touchmove', (e) => {
+    if (!wake()) return;
+    const touches = e.targetTouches;
+    let pointer = pointers[0];
+    for (let i = 0; i < touches.length; i++) {
+      let posX = scaleByPixelRatio(touches[i].clientX);
+      let posY = scaleByPixelRatio(touches[i].clientY);
+      if (!pointerInitialized) updatePointerDownData(pointer, touches[i].identifier, posX, posY);
+      else updatePointerMoveData(pointer, posX, posY, pointer.color);
+    }
+  });
+  listen(window, 'touchend', (e) => {
     const touches = e.changedTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
@@ -1190,7 +1257,7 @@ const useFluidCursor = () => {
 
   // CRITICAL: Handle touchcancel - this fires when touch is interrupted
   // (e.g., by system gestures, alerts, or when browser takes over the touch)
-  window.addEventListener('touchcancel', (e) => {
+  listen(window, 'touchcancel', (e) => {
     const touches = e.changedTouches;
     let pointer = pointers[0];
     for (let i = 0; i < touches.length; i++) {
@@ -1200,25 +1267,27 @@ const useFluidCursor = () => {
     resetAllPointers();
   });
 
-  // Reset pointers when page visibility changes (e.g., switching apps on mobile)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      resetAllPointers();
-    }
+  // Clear stale trails and cancel animation work while the page is away.
+  // A visible page resumes on pointer input, so an untouched tab stays idle.
+  listen(document, 'visibilitychange', () => {
+    if (document.hidden) stop();
   });
-
-  // Reset pointers when window loses focus
-  window.addEventListener('blur', () => {
-    resetAllPointers();
+  listen(window, 'blur', stop);
+  listen(window, 'pagehide', () => {
+    pageActive = false;
+    stop();
   });
-
-  // Reset pointers on page unload/beforeunload
-  window.addEventListener('pagehide', () => {
-    resetAllPointers();
+  listen(window, 'pageshow', () => {
+    pageActive = true;
+  });
+  listen(window, 'resize', () => {
+    if (!canRun()) return;
+    if (resizeCanvas()) initFramebuffers();
   });
 
   // Helper function to reset all pointer states
   function resetAllPointers() {
+    pointerInitialized = false;
     for (let i = 0; i < pointers.length; i++) {
       pointers[i].down = false;
       pointers[i].moved = false;
@@ -1227,6 +1296,7 @@ const useFluidCursor = () => {
   }
 
   function updatePointerDownData(pointer, id, posX, posY) {
+    pointerInitialized = true;
     pointer.id = id;
     pointer.down = true;
     pointer.moved = false;
@@ -1310,14 +1380,13 @@ const useFluidCursor = () => {
   function getResolution(resolution) {
     let aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
     if (aspectRatio < 1) aspectRatio = 1.0 / aspectRatio;
-    const min = Math.round(resolution);
-    const max = Math.round(resolution * aspectRatio);
+    const min = Math.max(1, Math.floor(Math.min(resolution, maxTextureSize / aspectRatio)));
+    const max = Math.max(1, Math.round(min * aspectRatio));
     if (gl.drawingBufferWidth > gl.drawingBufferHeight)
       return { width: max, height: min };
     else return { width: min, height: max };
   }
   function scaleByPixelRatio(input) {
-    const pixelRatio = window.devicePixelRatio || 1;
     return Math.floor(input * pixelRatio);
   }
   function hashCode(s) {
@@ -1329,8 +1398,22 @@ const useFluidCursor = () => {
     }
     return hash;
   }
-};
+  return () => {
+    stop();
+    disposed = true;
+    eventController.abort();
+    for (const texture of textures) gl.deleteTexture(texture);
+    for (const framebuffer of framebuffers) gl.deleteFramebuffer(framebuffer);
+    for (const shader of shaders) gl.deleteShader(shader);
+    for (const program of programs) gl.deleteProgram(program);
+    for (const buffer of buffers) gl.deleteBuffer(buffer);
+    textures.clear();
+    framebuffers.clear();
+    shaders.clear();
+    programs.clear();
+    buffers.clear();
+  };
+}
 
-window.onload = () => {
-  useFluidCursor();
-};
+if (document.readyState === 'complete') useFluidCursor();
+else window.addEventListener('load', useFluidCursor, { once: true });

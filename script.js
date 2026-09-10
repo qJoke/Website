@@ -1,12 +1,62 @@
 
 document.addEventListener('DOMContentLoaded', () => {
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let prefersReducedMotion = motionPreference.matches;
     if (window.AOS) {
         AOS.init({
-            duration: 900,
+            duration: 600,
             once: true,
-            offset: 60
+            offset: 60,
+            disable: () => prefersReducedMotion
         });
+        document.documentElement.classList.add('aos-ready');
     }
+
+    // Keep keyboard focus inside an open dialog and restore the previous page state.
+    const dialogStates = new Map();
+    const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex="0"]';
+    const setDialogOpen = (dialog, isOpen, backdrop = null) => {
+        if (!dialog) return;
+        if (isOpen) {
+            if (dialogStates.has(dialog)) return;
+            const siblings = Array.from(document.body.children).filter(element => element !== dialog && element !== backdrop);
+            dialogStates.set(dialog, {
+                focus: document.activeElement,
+                overflow: document.body.style.overflow,
+                siblings: siblings.map(element => [element, element.inert])
+            });
+            dialog.inert = false;
+            dialog.setAttribute('aria-hidden', 'false');
+            siblings.forEach(element => { element.inert = true; });
+            document.body.style.overflow = 'hidden';
+            dialog.querySelector(focusableSelector)?.focus({ preventScroll: true });
+        } else {
+            const state = dialogStates.get(dialog);
+            if (!state) return;
+            state.siblings.forEach(([element, inert]) => { element.inert = inert; });
+            document.body.style.overflow = state.overflow;
+            dialogStates.delete(dialog);
+            if (state.focus?.isConnected) state.focus.focus({ preventScroll: true });
+            dialog.inert = true;
+            dialog.setAttribute('aria-hidden', 'true');
+        }
+    };
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Tab') return;
+        const dialog = Array.from(dialogStates.keys()).at(-1);
+        if (!dialog) return;
+        const targets = Array.from(dialog.querySelectorAll(focusableSelector)).filter(element => element.getClientRects().length && !element.closest('[inert]'));
+        const first = targets[0];
+        const last = targets.at(-1);
+        if (!first) return;
+        if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
 
     // Pricing toggle functionality
     const toggleButtons = document.querySelectorAll('.toggle-btn');
@@ -17,7 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!targetGrid) return;
 
         toggleButtons.forEach(btn => {
-            btn.classList.toggle('active', btn.getAttribute('data-plan') === plan);
+            const active = btn.getAttribute('data-plan') === plan;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', String(active));
         });
 
         pricingGrids.forEach(grid => {
@@ -93,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = findPlanCard(planName);
         if (card) {
             card.classList.add('pricing-card--recommended');
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
         }
     };
 
@@ -182,27 +234,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // FAQ accordion functionality
     const faqQuestions = document.querySelectorAll('.faq-question');
 
-    faqQuestions.forEach(question => {
+    faqQuestions.forEach((question, index) => {
+        const panel = question.nextElementSibling;
+        if (!panel) return;
+        question.id = `faq-question-${index}`;
+        panel.id = `faq-answer-${index}`;
+        question.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('aria-labelledby', question.id);
+        const setExpanded = (button, answer, expanded) => {
+            button.classList.toggle('active', expanded);
+            button.setAttribute('aria-expanded', String(expanded));
+            answer.hidden = !expanded;
+            answer.style.maxHeight = expanded ? 'none' : '';
+        };
+        setExpanded(question, panel, question.classList.contains('active'));
         question.addEventListener('click', () => {
             const activeQuestion = document.querySelector('.faq-question.active');
             if (activeQuestion && activeQuestion !== question) {
-                activeQuestion.classList.remove('active');
                 const activeAnswer = activeQuestion.nextElementSibling;
-                if (activeAnswer) {
-                    activeAnswer.style.maxHeight = null;
-                }
+                if (activeAnswer) setExpanded(activeQuestion, activeAnswer, false);
             }
-
-            question.classList.toggle('active');
-            const answer = question.nextElementSibling;
-
-            if (question.classList.contains('active')) {
-                if (answer) {
-                    answer.style.maxHeight = `${answer.scrollHeight}px`;
-                }
-            } else if (answer) {
-                answer.style.maxHeight = null;
-            }
+            setExpanded(question, panel, !question.classList.contains('active'));
         });
     });
 
@@ -223,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const formatted = value.toLocaleString('ro-RO');
             return includeSuffix && suffix ? `${formatted}${suffix}` : formatted;
         };
+
+        if (prefersReducedMotion) {
+            valueElement.textContent = formatValue(targetValue, true);
+            return;
+        }
 
         let current = 0;
         const duration = 1800;
@@ -369,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetScroll = getScrollPositionForIndex(index);
             sliderWindow.scrollTo({
                 left: targetScroll,
-                behavior: smooth ? 'smooth' : 'auto'
+                behavior: smooth && !prefersReducedMotion ? 'smooth' : 'auto'
             });
         };
 
@@ -689,12 +746,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         `
                     : '';
                 const releaseText = movie.releaseDate ? formatReleaseDate(movie.releaseDate) : '—';
-                const posterSrc = movie.poster || placeholderPoster;
+                const posterSrc = movie.poster?.replace('/w780/', '/w500/') || placeholderPoster;
+                const posterSet = movie.poster ? `srcset="${posterSrc} 500w, ${movie.poster} 780w" sizes="(max-width: 768px) 200px, 260px"` : '';
                 return `
                 <article class="movie-card" data-index="${index}">
                     <div class="movie-card__poster">
-                        <img src="${posterSrc}" alt="Poster ${movie.title}" loading="lazy"
-                            decoding="async" draggable="false" onerror="this.src='${placeholderPoster}'">
+                        <img src="${posterSrc}" ${posterSet} alt="Poster ${movie.title}" loading="lazy"
+                            decoding="async" draggable="false" width="342" height="513">
                         <span class="movie-card__quality-badge">HD/4K</span>
                         <button class="movie-card__play" type="button" data-trailer-index="${index}"
                             aria-label="Redă previzualizarea video pentru ${movie.title}">
@@ -738,9 +796,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const recentAutoIntervalMs = 30;
     const recentAutoStepPx = (recentAutoSpeed * recentAutoIntervalMs) / 1000;
 
-    const prefersReducedMotion = window.matchMedia
-        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        : false;
+    let recentIsVisible = !('IntersectionObserver' in window);
+    let recentUserPaused = prefersReducedMotion;
+    let recentIsHovered = false;
+    const recentPauseButton = document.querySelector('.recent-movies-pause');
 
     const getRecentSlideWidth = () => {
         if (!recentMoviesTrack) return 260;
@@ -818,6 +877,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pauseRecentAuto = () => {
         recentIsAutoPaused = true;
+        if (recentAutoTimer) {
+            clearInterval(recentAutoTimer);
+            recentAutoTimer = null;
+        }
         if (recentAutoResumeTimer) {
             clearTimeout(recentAutoResumeTimer);
             recentAutoResumeTimer = null;
@@ -825,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const startRecentAuto = () => {
-        if (prefersReducedMotion || !recentMoviesWindow) return;
+        if (prefersReducedMotion || !recentMoviesWindow || document.hidden || !recentIsVisible || recentUserPaused || recentIsHovered || recentMoviesWindow.contains(document.activeElement) || document.querySelector('.trailer-modal.is-open')) return;
         if (recentAutoTimer) return;
         recentIsAutoPaused = false;
         recentAutoTimer = setInterval(() => {
@@ -842,10 +905,8 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(recentAutoResumeTimer);
         }
         recentAutoResumeTimer = setTimeout(() => {
-            recentIsAutoPaused = false;
-            if (!recentAutoTimer) {
-                startRecentAuto();
-            }
+            recentAutoResumeTimer = null;
+            startRecentAuto();
         }, delay);
     };
 
@@ -976,11 +1037,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeTrailer = () => {
         if (!trailerModal) return;
+        setDialogOpen(trailerModal, false);
         trailerModal.classList.remove('is-open');
-        trailerModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
         if (trailerFrame) {
-            trailerFrame.src = '';
+            trailerFrame.removeAttribute('src');
         }
         setTrailerFallback(false);
     };
@@ -989,11 +1049,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!url) return '';
         try {
             const parsedUrl = new URL(url);
+            if (parsedUrl.protocol !== 'https:') return '';
             let videoId = '';
 
-            if (parsedUrl.hostname.includes('youtu.be')) {
+            if (parsedUrl.hostname === 'youtu.be') {
                 videoId = parsedUrl.pathname.replace('/', '');
-            } else if (parsedUrl.hostname.includes('youtube.com')) {
+            } else if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(parsedUrl.hostname)) {
                 videoId = parsedUrl.searchParams.get('v') || parsedUrl.pathname.split('/').filter(Boolean).pop() || '';
             }
 
@@ -1007,8 +1068,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const openTrailer = async (movie) => {
         if (!trailerModal || !trailerFrame) return;
         trailerModal.classList.add('is-open');
-        trailerModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        setDialogOpen(trailerModal, true);
+        pauseRecentAuto();
+        trailerFrame.title = `Previzualizare video: ${movie.title}`;
 
         const embedUrl = getYoutubeEmbedUrl(movie.trailerUrl);
         if (embedUrl) {
@@ -1030,6 +1092,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (recentMoviesTrack) {
+        recentMoviesTrack.addEventListener('error', event => {
+            const poster = event.target;
+            if (poster instanceof HTMLImageElement && poster.getAttribute('src') !== placeholderPoster) {
+                poster.removeAttribute('srcset');
+                poster.src = placeholderPoster;
+            }
+        }, true);
         renderRecentMovies();
         setupRecentMoviesInfinite();
         recentMoviesTrack.addEventListener('dragstart', (event) => {
@@ -1057,6 +1126,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             recentMoviesWindow.addEventListener('focusin', pauseRecentAuto);
             recentMoviesWindow.addEventListener('focusout', () => scheduleRecentAuto(700));
+            recentMoviesWindow.addEventListener('pointerenter', event => {
+                if (event.pointerType !== 'mouse') return;
+                recentIsHovered = true;
+                pauseRecentAuto();
+            });
+            recentMoviesWindow.addEventListener('pointerleave', () => {
+                recentIsHovered = false;
+                scheduleRecentAuto();
+            });
+            if ('IntersectionObserver' in window) {
+                const moviesObserver = new IntersectionObserver(([entry]) => {
+                    recentIsVisible = entry.isIntersecting;
+                    if (recentIsVisible) startRecentAuto();
+                    else pauseRecentAuto();
+                }, { threshold: 0.1 });
+                moviesObserver.observe(recentMoviesWindow);
+            }
         }
         window.addEventListener('resize', () => {
             if (!recentMoviesWindow) return;
@@ -1067,6 +1153,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         startRecentAuto();
     }
+
+    const updatePauseButton = () => {
+        if (!recentPauseButton) return;
+        const paused = recentUserPaused || prefersReducedMotion;
+        recentPauseButton.setAttribute('aria-pressed', String(paused));
+        recentPauseButton.textContent = paused ? 'Pornește derularea' : 'Pauză derulare';
+        recentPauseButton.disabled = prefersReducedMotion;
+    };
+    recentPauseButton?.addEventListener('click', () => {
+        recentUserPaused = !recentUserPaused;
+        if (recentUserPaused) pauseRecentAuto();
+        else startRecentAuto();
+        updatePauseButton();
+    });
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) pauseRecentAuto();
+        else startRecentAuto();
+    });
+    motionPreference.addEventListener('change', event => {
+        prefersReducedMotion = event.matches;
+        if (prefersReducedMotion) pauseRecentAuto();
+        else startRecentAuto();
+        updatePauseButton();
+    });
+    updatePauseButton();
 
     // WhatsApp chat interactions
     const whatsappBubble = document.getElementById('whatsapp-bubble');
@@ -1080,7 +1191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const openWhatsAppWithMessage = (message = whatsappDefaultMessage) => {
         const finalMessage = (message || '').trim() || whatsappDefaultMessage;
         const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(finalMessage)}`;
-        window.open(url, '_blank');
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 
     const whatsappLinks = document.querySelectorAll('a[href^="https://wa.me/447449765468"]:not(.js-whatsapp-plan)');
@@ -1099,15 +1210,22 @@ document.addEventListener('DOMContentLoaded', () => {
     whatsappBubble?.addEventListener('click', () => {
         if (whatsappWindow) {
             whatsappWindow.style.display = 'flex';
-            whatsappWindow.setAttribute('aria-hidden', 'false');
+            whatsappBubble.setAttribute('aria-expanded', 'true');
+            setDialogOpen(whatsappWindow, true);
+            whatsappTextarea?.focus();
         }
     });
 
-    closeChatBtn?.addEventListener('click', () => {
+    const closeChat = () => {
         if (whatsappWindow) {
+            setDialogOpen(whatsappWindow, false);
             whatsappWindow.style.display = 'none';
-            whatsappWindow.setAttribute('aria-hidden', 'true');
+            whatsappBubble?.setAttribute('aria-expanded', 'false');
         }
+    };
+    closeChatBtn?.addEventListener('click', closeChat);
+    whatsappWindow?.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeChat();
     });
 
     sendMessageBtn?.addEventListener('click', () => {
@@ -1115,10 +1233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const message = whatsappTextarea.value.trim();
         openWhatsAppWithMessage(message);
         whatsappTextarea.value = '';
-        whatsappWindow?.setAttribute('aria-hidden', 'true');
-        if (whatsappWindow) {
-            whatsappWindow.style.display = 'none';
-        }
+        closeChat();
     });
 
     const planButtons = document.querySelectorAll('.js-whatsapp-plan');
@@ -1145,18 +1260,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const openSidebar = () => {
         sidebar?.classList.add('active');
         overlay?.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        hamburger?.setAttribute('aria-expanded', 'true');
+        setDialogOpen(sidebar, true, overlay);
     };
 
     const closeSidebar = () => {
+        setDialogOpen(sidebar, false);
         sidebar?.classList.remove('active');
         overlay?.classList.remove('active');
-        document.body.style.overflow = '';
+        hamburger?.setAttribute('aria-expanded', 'false');
     };
 
     hamburger?.addEventListener('click', openSidebar);
     overlay?.addEventListener('click', closeSidebar);
     sidebar?.querySelector('.close-btn')?.addEventListener('click', closeSidebar);
+    sidebar?.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeSidebar();
+    });
+    window.matchMedia('(min-width: 1101px)').addEventListener('change', event => {
+        if (event.matches && sidebar?.classList.contains('active')) closeSidebar();
+    });
 
     const mobileLinks = sidebar?.querySelectorAll('a[href^="#"]');
     mobileLinks?.forEach(link => {
@@ -1197,7 +1320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     scrollToTopBtn?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     });
 
     // Smooth scroll for anchor links
@@ -1206,11 +1329,13 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (event) => {
             const targetId = link.getAttribute('href');
             if (!targetId || targetId === '#') return;
-            const targetElement = document.querySelector(targetId);
+            const targetElement = document.getElementById(targetId.slice(1));
             if (!targetElement) return;
 
             event.preventDefault();
-            targetElement.scrollIntoView({ behavior: 'smooth' });
+            targetElement.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            if (!targetElement.hasAttribute('tabindex')) targetElement.setAttribute('tabindex', '-1');
+            targetElement.focus({ preventScroll: true });
         });
     });
 
@@ -1237,7 +1362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (installSection) {
                 event.preventDefault();
-                installSection.scrollIntoView({ behavior: 'smooth' });
+                installSection.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
             }
 
             if (targetCard) {
@@ -1340,6 +1465,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (contactForm && phoneInput && emailInput) {
+        let contactSending = false;
         const getPhoneValue = () => {
             const rawValue = phoneInput.value.trim();
             if (rawValue.length === 0) return '';
@@ -1347,7 +1473,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fullNumber = phoneIti.getNumber();
                 return fullNumber || rawValue;
             }
-            return rawValue;
+            const dialCode = phoneIti?.getSelectedCountryData()?.dialCode;
+            if (rawValue.startsWith('+') || !dialCode) return rawValue;
+            return `+${dialCode} ${rawValue}`;
         };
 
         const isPhoneValid = () => {
@@ -1356,7 +1484,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (phoneIti && phoneUtilsReady && typeof phoneIti.isValidNumber === 'function') {
                 return phoneIti.isValidNumber();
             }
-            return true;
+            return /^\+?[\d\s().-]{7,40}$/.test(rawValue) && rawValue.replace(/\D/g, '').length >= 7;
         };
 
         const validateContactFields = () => {
@@ -1369,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!hasPhone && !hasEmail) {
                 phoneError = helperText;
                 emailError = helperText;
-            } else if (hasPhone && !hasEmail && phoneIti && phoneUtilsReady && !isPhoneValid()) {
+            } else if (hasPhone && !isPhoneValid()) {
                 phoneError = 'Numărul de telefon pare invalid.';
             }
 
@@ -1405,6 +1533,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const setSendingState = (isSending) => {
+            contactSending = isSending;
+            contactForm.setAttribute('aria-busy', String(isSending));
             if (!submitButton) return;
             submitButton.disabled = isSending;
             submitButton.textContent = isSending ? 'Se trimite...' : 'Trimite mesajul';
@@ -1438,6 +1568,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             field.addEventListener('input', () => field.setCustomValidity(''));
         });
+        [providerInput, messageInput].forEach(field => {
+            field?.addEventListener('input', () => field.setCustomValidity(''));
+        });
         emailInput.addEventListener('invalid', () => {
             if (emailInput.validity.typeMismatch) {
                 emailInput.setCustomValidity('Adresa de email nu pare validă (ex. nume@domeniu.com).');
@@ -1446,8 +1579,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         contactForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            if (contactSending) return;
             hideStatus();
             validateContactFields();
+            requiredFieldMessages.forEach(([field, message]) => {
+                if (field) field.setCustomValidity(field.value.trim() ? '' : message);
+            });
+            // Also validate scripted/pasted values; HTML maxlength is only an editing aid.
+            [nameInput, countryInput, providerInput, messageInput, phoneInput, emailInput].forEach(field => {
+                if (field && field.maxLength > 0 && field.value.length > field.maxLength) {
+                    field.setCustomValidity(`Folosește cel mult ${field.maxLength} de caractere.`);
+                }
+            });
 
             if (!contactForm.checkValidity()) {
                 contactForm.reportValidity();
@@ -1485,7 +1628,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 emailInput.setCustomValidity('');
                 showStatus('Mulțumim! Formularul a fost trimis. Revenim cât mai rapid.');
             } catch (error) {
-                console.error('EmailJS error:', error);
+                console.error('Trimiterea formularului a eșuat.');
                 showStatus('Nu am putut trimite mesajul. Încearcă din nou sau contactează-ne pe WhatsApp.', true);
             } finally {
                 setSendingState(false);
@@ -1520,7 +1663,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (newsletterSending) return;
 
             const emailValue = newsletterInput.value.trim();
-            if (!/\S+@\S+\.\S+/.test(emailValue)) {
+            if (!newsletterInput.checkValidity() || emailValue.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
                 setNewsletterMessage('Adaugă un email valid ca să încheiem abonarea.', 'error');
                 newsletterInput.focus();
                 return;
@@ -1549,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setNewsletterMessage('Te-am notat! Revenim cu noutăți.', 'success');
                 newsletterForm.reset();
             } catch (error) {
-                console.error('EmailJS newsletter error:', error);
+                console.error('Trimiterea abonării a eșuat.');
                 setNewsletterMessage('Nu am putut înregistra abonarea. Încearcă din nou sau scrie-ne pe WhatsApp.', 'error');
             } finally {
                 setNewsletterSending(false);

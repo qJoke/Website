@@ -344,7 +344,7 @@ textarea:focus-visible {
 .hero-content {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
     align-items: center;
     gap: clamp(2rem, 4vw, 3.75rem);
     z-index: 1;
@@ -374,7 +374,7 @@ textarea:focus-visible {
 }
 
 .hero-title {
-    font-size: clamp(3rem, 4.9vw, 4.55rem);
+    font-size: clamp(2.75rem, 4.2vw, 3.8rem);
     line-height: 1.02;
     margin: 0;
     max-width: 690px;
@@ -397,7 +397,7 @@ textarea:focus-visible {
 
 .hero-highlights {
     display: grid;
-    grid-template-columns: repeat(4, minmax(110px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.9rem;
     margin-top: 0.5rem;
     max-width: 650px;
@@ -1527,7 +1527,7 @@ textarea:focus-visible {
     cursor: grab;
     overscroll-behavior-x: contain;
     will-change: scroll-position;
-    touch-action: pan-x;
+    touch-action: pan-y;
 }
 
 .testimonials-window.is-grabbing {
@@ -2538,7 +2538,7 @@ textarea {
 
 @media (max-width: 768px) {
     .container {
-        width: min(1180px, 94vw);
+        width: calc(100% - 2rem);
     }
 
     .top-bar {
@@ -2589,7 +2589,7 @@ textarea {
     }
 
     .hero-section {
-        padding: 5rem 0 4rem;
+        padding: 2.5rem 0 3rem;
         min-height: auto;
     }
 
@@ -2664,8 +2664,8 @@ textarea {
     }
 
     .recent-movies-controls .slider-btn {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
     }
 
     .channels-grid {
@@ -2770,15 +2770,15 @@ textarea {
     }
 
     .nav-buttons .btn {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
     }
 
     .hamburger {
         margin-left: 0;
         align-self: center;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
     }
 
     .hero-actions {
@@ -2791,7 +2791,7 @@ textarea {
     }
 
     .hero-highlights {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .hero-highlights div {
@@ -2931,4 +2931,106 @@ textarea {
     text-align: center;
     color: var(--color-text-muted);
     font-size: 0.85rem;
+}
+
+/* Responsive and keyboard refinements; preserve all existing page sections. */
+html {
+    scroll-padding-top: 110px;
+    color-scheme: dark;
+}
+
+button, input, textarea, select {
+    font: inherit;
+}
+
+select:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+[hidden] { display: none !important; }
+
+html:not(.aos-ready) [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+.skip-link {
+    position: fixed;
+    top: 12px;
+    left: 16px;
+    z-index: 3000;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: var(--color-primary);
+    color: var(--color-bg);
+    transform: translateY(-180%);
+}
+
+.skip-link:focus { transform: none; }
+.navbar:focus-within { transform: none !important; }
+.logo { flex-shrink: 0; }
+.main-nav { min-width: 0; }
+.nav-links { gap: clamp(0.7rem, 1.4vw, 1.75rem); }
+.nav-links a { display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; }
+
+.sidebar { visibility: hidden; overscroll-behavior: contain; }
+.sidebar.active { visibility: visible; }
+.sidebar .close-btn, .chat-header .close-btn { min-width: 44px; min-height: 44px; }
+.sidebar-contact a, .footer-column a { overflow-wrap: anywhere; }
+.whatsapp-bubble { border: 0; padding: 0; }
+.whatsapp-chat-window { max-height: calc(100dvh - 100px); overflow-y: auto; }
+.trailer-modal__content { max-height: calc(100dvh - 32px); overflow-y: auto; }
+.recent-movies-controls { flex-wrap: wrap; }
+.recent-movies-pause { min-height: 44px; padding: 0.6rem 1rem; font-size: 0.85rem; }
+.movie-card:focus-within .movie-card__play { opacity: 1; transform: none; }
+.movie-card__play:focus-visible { outline-offset: -5px; }
+.newsletter-form input { min-width: 0; }
+.newsletter-form button { flex-shrink: 0; }
+.newsletter-form button, .toggle-btn, .pricing-details-toggle { min-height: 44px; }
+.channels-grid > *, .contact-grid > *, .devices-grid > *, .package-finder > *, .footer-grid > * { min-width: 0; }
+.legal-header__inner { flex-wrap: wrap; }
+
+@media (min-width: 769px) and (max-width: 1100px) {
+    .main-nav { display: none; }
+    .hamburger { display: flex; }
+    .hero-content { grid-template-columns: minmax(0, 1fr); }
+    .hero-title { max-width: 22ch; }
+    .hero-media { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+    .hero-card { grid-template-columns: minmax(0, 1fr); }
+    .hero-card .btn { grid-column: 1; grid-row: auto; }
+    .hero-highlights { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: none; }
+    .package-finder { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 768px) {
+    html { scroll-padding-top: 90px; }
+    body { background-attachment: scroll; }
+    input, select, textarea, .contact-form input, .contact-form textarea, .package-finder select { font-size: 16px; }
+    .main-nav { display: none; }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 0.6px; padding-inline: 0.6rem; text-align: center; }
+    .hero-title { overflow-wrap: anywhere; }
+    .hero-highlights { gap: 0.65rem; }
+    .hero-highlights div { padding: 0.85rem; }
+    .section-header h2 { font-size: clamp(1.75rem, 7vw, 2.5rem); line-height: 1.2; }
+    .section-tag { letter-spacing: 1.4px; }
+    .channels-grid, .devices-grid, .contact-grid, .faq-container { grid-template-columns: minmax(0, 1fr); }
+    .contact-form form { padding: 1.25rem; }
+    .testimonials-slider { display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; }
+    .testimonials-window { grid-column: 1 / -1; grid-row: 1; }
+    .testimonials-slider .slider-btn { display: flex; grid-row: 2; width: 44px; height: 44px; }
+    .testimonials-slider .slider-btn--next { grid-column: 3; }
+    .sidebar { width: min(360px, calc(100% - 24px)); padding: 3.5rem 1.5rem 1.5rem; }
+    .whatsapp-bubble { bottom: max(14px, env(safe-area-inset-bottom)); }
+    .scroll-to-top { bottom: max(14px, env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    [data-aos] { opacity: 1 !important; transform: none !important; }
 }

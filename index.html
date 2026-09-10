@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Magix TV – Poartă ta către divertisment</title>
+    <title>Pixel Magix TV – Poarta ta către divertisment</title>
+    <meta name="theme-color" content="#02050b">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="canonical" href="https://pixelmagix.shop/">
     <meta name="description"
         content="Pixel Magix TV aduce cele mai îndrăgite canale, filme și seriale direct la tine, oriunde în lume. Descoperă abonamente flexibile, suport rapid și soluții IPTV de top.">
 
@@ -16,7 +19,7 @@
 
     <!-- Open Graph meta tags for social sharing -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Pixel Magix TV – Poartă ta către divertisment">
+    <meta property="og:title" content="Pixel Magix TV – Poarta ta către divertisment">
     <meta property="og:description"
         content="Acces instant la 520+ de canale românești, 12.000+ filme la cerere și 1.300+ seriale la cerere. IPTV de top pentru diaspora românească.">
     <meta property="og:image" content="https://pixelmagix.shop/og-image.jpg">
@@ -29,7 +32,7 @@
 
     <!-- Twitter Card meta tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Pixel Magix TV – Poartă ta către divertisment">
+    <meta name="twitter:title" content="Pixel Magix TV – Poarta ta către divertisment">
     <meta name="twitter:description"
         content="Acces instant la 520+ de canale românești, 12.000+ filme la cerere și 1.300+ seriale la cerere.">
     <meta name="twitter:image" content="https://pixelmagix.shop/og-image.jpg">
@@ -37,7 +40,7 @@
     <link rel="icon" type="image/webp" href="Pixel%20Magix.webp">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/css/intlTelInput.css"
         integrity="sha384-KgNFOuU4mTPtXZmFu6WaY2/jxbJEA+INAC2SFk+B0vTR9iuuKE+5qujIZY8Mnmzt" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css?v=perf-sri-2026-07-27">
+    <link rel="stylesheet" href="style.css?v=responsive-security-2026-09-10">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet"
@@ -47,6 +50,7 @@
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Sari la conținut</a>
     <canvas id="fluid" class="fluid-canvas" aria-hidden="true"></canvas>
 
     <header class="top-bar">
@@ -62,7 +66,7 @@
     <header class="navbar">
         <div class="container navbar__container">
             <a href="#hero" class="logo">Pixel Magix</a>
-            <nav class="main-nav">
+            <nav class="main-nav" aria-label="Navigare principală">
                 <ul class="nav-links">
                     <li><a href="#hero">Acasă</a></li>
                     <li><a href="#servicii">Servicii</a></li>
@@ -78,7 +82,7 @@
                     <i class="fab fa-whatsapp" aria-hidden="true"></i>
                     <span>Începe acum</span>
                 </a>
-                <button class="hamburger" aria-label="Deschide meniul">
+                <button class="hamburger" type="button" aria-label="Deschide meniul" aria-controls="mobile-menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -87,7 +91,7 @@
         </div>
     </header>
 
-    <div class="sidebar">
+    <div class="sidebar" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Meniu mobil" aria-hidden="true" inert>
         <button class="close-btn" aria-label="Închide meniul">&times;</button>
         <div class="sidebar-content">
             <h3 class="sidebar-title">Pixel Magix</h3>
@@ -118,7 +122,7 @@
                     aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener"
                     aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener"
+                <a href="https://www.instagram.com/pixelmagixtv" target="_blank" rel="noopener"
                     aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener"
                     aria-label="YouTube"><i class="fab fa-youtube"></i></a>
@@ -132,13 +136,13 @@
                 class="fab fa-facebook-f"></i></a>
         <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener" aria-label="Twitter"><i
                 class="fab fa-twitter"></i></a>
-        <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener" aria-label="Instagram"><i
+        <a href="https://www.instagram.com/pixelmagixtv" target="_blank" rel="noopener" aria-label="Instagram"><i
                 class="fab fa-instagram"></i></a>
         <a href="https://www.facebook.com/pixelmagix.shop/" target="_blank" rel="noopener" aria-label="YouTube"><i
                 class="fab fa-youtube"></i></a>
     </div>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="hero" class="hero-section">
             <div class="hero-overlay"></div>
             <div class="container hero-content">
@@ -206,15 +210,15 @@
         <section id="stats" class="stats-section">
             <div class="container stats-grid">
                 <article class="stat-card" data-aos="zoom-in" data-target="520" data-suffix="+">
-                    <span class="stat-value">0</span>
+                    <span class="stat-value">520+</span>
                     <span class="stat-label">Canale românești</span>
                 </article>
                 <article class="stat-card" data-aos="zoom-in" data-target="12000" data-suffix="+">
-                    <span class="stat-value">0</span>
+                    <span class="stat-value">12.000+</span>
                     <span class="stat-label">Filme la cerere</span>
                 </article>
                 <article class="stat-card" data-aos="zoom-in" data-target="1300" data-suffix="+">
-                    <span class="stat-value">0</span>
+                    <span class="stat-value">1.300+</span>
                     <span class="stat-label">Seriale la cerere</span>
                 </article>
             </div>
@@ -274,7 +278,7 @@
                 </div>
                 <div class="channels-media" data-aos="fade-left">
                     <div class="channels-card">
-                        <img src="background.webp" alt="Interfața Pixel Magix" loading="lazy" width="600" height="338">
+                        <img src="background.webp" alt="Interfața Pixel Magix" loading="lazy" width="600" height="338" decoding="async">
                         <div class="channels-card__badge">520+ canale HD</div>
                     </div>
                 </div>
@@ -341,8 +345,8 @@
                     </div>
                 </div>
                 <div class="toggle-container" data-aos="fade-up">
-                    <button class="toggle-btn" data-plan="standard">Standard</button>
-                    <button class="toggle-btn active" data-plan="vip">VIP</button>
+                    <button class="toggle-btn" type="button" data-plan="standard" aria-pressed="false" aria-controls="standard-plans">Standard</button>
+                    <button class="toggle-btn active" type="button" data-plan="vip" aria-pressed="true" aria-controls="vip-plans">VIP</button>
                 </div>
                 <div class="pricing-wrapper">
                     <div class="pricing-grid" id="standard-plans">
@@ -556,6 +560,7 @@
                         <p>Postere, previzualizări video și titluri populare disponibile în HD și 4K pe platforma Pixel Magix.</p>
                     </div>
                     <div class="recent-movies-controls">
+                        <button class="recent-movies-pause btn btn--ghost" type="button" aria-pressed="false">Pauză derulare</button>
                         <button class="slider-btn recent-movies-btn--prev" type="button"
                             aria-label="Deruleaza filmele inapoi"><i class="fas fa-chevron-left"></i></button>
                         <button class="slider-btn recent-movies-btn--next" type="button"
@@ -735,7 +740,7 @@
                             recomandăm pachetul ideal. Totul fără costuri și fără obligații.</p>
                         <div class="promo-image-container">
                             <img src="https://images.unsplash.com/photo-1525182008055-f88b95ff7980?auto=format&fit=crop&w=600&q=80"
-                                alt="Client fericit folosind Pixel Magix" loading="lazy" width="600" height="400">
+                                alt="Client fericit folosind Pixel Magix" loading="lazy" width="600" height="400" decoding="async">
                         </div>
                     </div>
                 </div>
@@ -772,32 +777,32 @@
                         <p class="form-required-note">* câmp obligatoriu</p>
                         <div class="form-group">
                             <label for="nume">Nume complet <span class="required-mark" aria-hidden="true">*</span></label>
-                            <input type="text" id="nume" name="nume" placeholder="Introduceți numele" required>
+                            <input type="text" id="nume" name="nume" placeholder="Introduceți numele" required maxlength="120" autocomplete="name">
                         </div>
                         <div class="form-group phone-group">
                             <label for="telefon">Număr de telefon</label>
                             <input type="tel" id="telefon" name="telefon" placeholder="Ex. 0712 345 678"
-                                autocomplete="tel" inputmode="tel">
-                            <p class="input-note">Prefixul țării se detectează automat — îl poți schimba din listă.
+                                autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="contact-method-note">
+                            <p class="input-note" id="contact-method-note">Prefixul țării se detectează automat — îl poți schimba din listă.
                                 Completează cel puțin unul: telefonul sau emailul.</p>
                         </div>
                         <div class="form-group">
                             <label for="email">Adresă de email</label>
-                            <input type="email" id="email" name="email" placeholder="exemplu@domeniu.com">
+                            <input type="email" id="email" name="email" placeholder="exemplu@domeniu.com" maxlength="254" autocomplete="email">
                         </div>
                         <div class="form-group">
                             <label for="tara">Țara de reședință <span class="required-mark" aria-hidden="true">*</span></label>
-                            <input type="text" id="tara" name="tara" placeholder="Ex. Italia" required>
+                            <input type="text" id="tara" name="tara" placeholder="Ex. Italia" required maxlength="100" autocomplete="country-name">
                         </div>
                         <div class="form-group">
                             <label for="furnizor">Furnizor Internet</label>
                             <input type="text" id="furnizor" name="furnizor"
-                                placeholder="Ex. Virgin Media, TIM Italia, Fastweb">
+                                placeholder="Ex. Virgin Media, TIM Italia, Fastweb" maxlength="160">
                         </div>
                         <div class="form-group">
                             <label for="mesaj">Mesaj</label>
                             <textarea id="mesaj" name="mesaj" rows="4"
-                                placeholder="Spune-ne ce canale urmărești sau ce dispozitiv folosești"></textarea>
+                                placeholder="Spune-ne ce canale urmărești sau ce dispozitiv folosești" maxlength="3000"></textarea>
                         </div>
                         <button type="submit" class="btn btn--primary">Trimite mesajul</button>
                         <div class="form-status" role="status" aria-live="polite" aria-atomic="true" aria-hidden="true">
@@ -828,7 +833,7 @@
                 <div class="install-grid">
                     <article class="install-card" data-install="samsung" data-aos="fade-up">
                         <div class="install-card__media brand-samsung">
-                            <img src="samsung.webp" alt="Banner aplicație Samsung TV" width="400" height="225">
+                            <img src="samsung.webp" alt="Banner aplicație Samsung TV" width="400" height="225" loading="lazy" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>Samsung TV</h3>
@@ -836,16 +841,16 @@
                                 dacă nu o aveți, căutați aplicația XCloudTV.</p>
                             <div class="install-card__footer">
                                 <div class="install-app-logos" aria-label="Aplicații recomandate">
-                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40">
+                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40" decoding="async">
                                     <img src="xcloudtv logo.webp" alt="Siglă aplicație XCloudTV" loading="lazy" width="120"
-                                        height="40">
+                                        height="40" decoding="async">
                                 </div>
                             </div>
                         </div>
                     </article>
                     <article class="install-card" data-install="lg" data-aos="fade-up" data-aos-delay="100">
                         <div class="install-card__media brand-lg">
-                            <img src="lg.webp" alt="Banner aplicație LG TV" width="400" height="225">
+                            <img src="lg.webp" alt="Banner aplicație LG TV" width="400" height="225" loading="lazy" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>LG TV</h3>
@@ -853,16 +858,16 @@
                                 aveți, caută aplicația XCloudTV.</p>
                             <div class="install-card__footer">
                                 <div class="install-app-logos" aria-label="Aplicații recomandate">
-                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40">
+                                    <img src="bmc logo.png" alt="Siglă aplicație BMC" loading="lazy" width="120" height="40" decoding="async">
                                     <img src="xcloudtv logo.webp" alt="Siglă aplicație XCloudTV" loading="lazy" width="120"
-                                        height="40">
+                                        height="40" decoding="async">
                                 </div>
                             </div>
                         </div>
                     </article>
                     <article class="install-card" data-install="android" data-aos="fade-up" data-aos-delay="200">
                         <div class="install-card__media brand-android">
-                            <img src="amazon2.webp" alt="Banner Android TV și Amazon Fire TV" width="400" height="225">
+                            <img src="amazon2.webp" alt="Banner Android TV și Amazon Fire TV" width="400" height="225" loading="lazy" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>Android TV și Amazon Fire TV</h3>
@@ -878,7 +883,7 @@
                     </article>
                     <article class="install-card" data-install="apple" data-aos="fade-up" data-aos-delay="300">
                         <div class="install-card__media brand-apple">
-                            <img src="apple.webp" alt="Banner Apple și iOS" width="400" height="225">
+                            <img src="apple.webp" alt="Banner Apple și iOS" width="400" height="225" loading="lazy" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>Apple / iOS</h3>
@@ -887,14 +892,14 @@
                             <div class="install-card__footer">
                                 <div class="install-app-logos" aria-label="Aplicație recomandată">
                                     <img src="xcloud mobile logo.webp" alt="Siglă aplicație XCloud Mobile" loading="lazy"
-                                        width="140" height="40">
+                                        width="140" height="40" decoding="async">
                                 </div>
                             </div>
                         </div>
                     </article>
                     <article class="install-card" data-install="windows" data-aos="fade-up" data-aos-delay="400">
                         <div class="install-card__media brand-windows">
-                            <img src="windows.webp" alt="Banner aplicație Windows" width="400" height="225">
+                            <img src="windows.webp" alt="Banner aplicație Windows" width="400" height="225" loading="lazy" decoding="async">
                         </div>
                         <div class="install-card__body">
                             <h3>Windows 10/11</h3>
@@ -945,7 +950,7 @@
                 <form class="newsletter-form" novalidate>
                     <label class="sr-only" for="newsletter-email">Adresa ta de email</label>
                     <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Emailul tău"
-                        autocomplete="email" inputmode="email">
+                        autocomplete="email" inputmode="email" maxlength="254" required>
                     <button type="submit" aria-label="Trimite abonarea"><i class="fas fa-paper-plane"></i></button>
                 </form>
                 <p class="newsletter-status" role="status" aria-live="polite" aria-atomic="true"></p>
@@ -959,18 +964,19 @@
 
     <button class="scroll-to-top" aria-label="Înapoi sus"><i class="fas fa-arrow-up"></i></button>
 
-    <div class="whatsapp-bubble" id="whatsapp-bubble" aria-label="Deschide chat WhatsApp">
+    <button class="whatsapp-bubble" id="whatsapp-bubble" type="button" aria-label="Deschide chat WhatsApp" aria-controls="whatsapp-chat-window" aria-expanded="false">
         <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="28"
-            height="28">
-    </div>
+            height="28" decoding="async">
+    </button>
 
-    <div class="whatsapp-chat-window" id="whatsapp-chat-window" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="whatsapp-chat-window" id="whatsapp-chat-window" role="dialog" aria-modal="true" aria-label="Chat WhatsApp" aria-hidden="true" inert>
         <div class="chat-header">
             <span>WhatsApp Chat</span>
             <button class="close-btn" id="close-chat-btn" aria-label="Închide chatul">&times;</button>
         </div>
         <div class="chat-body">
-            <textarea id="whatsapp-message" placeholder="Scrie mesajul tău aici..."></textarea>
+            <label class="sr-only" for="whatsapp-message">Mesaj pentru WhatsApp</label>
+            <textarea id="whatsapp-message" maxlength="2000" placeholder="Scrie mesajul tău aici..."></textarea>
             <p class="chat-note">Mesajul se deschide în aplicația WhatsApp.</p>
         </div>
         <div class="chat-footer">
@@ -978,7 +984,7 @@
         </div>
     </div>
 
-    <div class="trailer-modal" id="trailer-modal" aria-hidden="true" role="dialog" aria-label="Previzualizare video film">
+    <div class="trailer-modal" id="trailer-modal" aria-hidden="true" aria-modal="true" role="dialog" aria-label="Previzualizare video film" inert>
         <div class="trailer-modal__backdrop" data-trailer-close></div>
         <div class="trailer-modal__content" role="document">
             <button class="trailer-modal__close" type="button" data-trailer-close
@@ -995,15 +1001,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"
         integrity="sha384-wziAfh6b/qT+3LrqebF9WeK4+J5sehS6FA10J1t3a866kJ/fvU5UwofWnQyzLtwu"
-        crossorigin="anonymous"></script>
-    <script src="fluid-cursor.js?v=perf-sri-2026-07-27" defer></script>
+        crossorigin="anonymous" defer></script>
+    <script src="fluid-cursor.js?v=responsive-security-2026-09-10" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" defer
         integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.12.4/build/js/intlTelInput.min.js"
         integrity="sha384-MaP+WODIptSC7Wk4y9Nk8mXLNQ6IqnRFPz1xfc40J25Tr215Ll4YjcBXEPxjiFhG"
-        crossorigin="anonymous"></script>
-    <script src="script.js?v=ux-refresh-2026-07"></script>
+        crossorigin="anonymous" defer></script>
+    <script src="script.js?v=responsive-security-2026-09-10" defer></script>
 </body>
 
 </html>

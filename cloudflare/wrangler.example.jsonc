@@ -5,7 +5,7 @@
   "workers_dev": false,
   "routes": [
     {
-      "pattern": "pixelmagix.shop/geo.json",
+      "pattern": "pixelmagix.shop/*",
       "zone_name": "pixelmagix.shop"
     }
   ]
