@@ -3,7 +3,51 @@
 `geo-worker.mjs` keeps the existing country endpoint and wraps the GitHub Pages
 origin with HTTPS redirects and response headers. The worker name stays
 `pixelmagix-geo` to update the existing deployment instead of creating another.
-The files are prepared locally; editing them does not update the public site.
+Editing the files does not update the public site until Wrangler is deployed.
+
+## Deployment status (2026-09-10)
+
+- The responsive UI was published through GitHub Pages from commit
+  `e7c1b202236748521e0b1ba21ad3557da1f8a375` (successful run `34512947653`).
+- Worker version `8c0556b8-cb5d-4312-9955-dcbf9bca1f9b` is deployed on
+  `pixelmagix.shop/*`. The effective route list contains only this route.
+- Live checks verified 200 responses for the HTML, CSS, JavaScript and geo
+  endpoint; CSP on HTML; HSTS, nosniff, frame, referrer and permissions headers;
+  and 301 HTTP-to-HTTPS redirects preserving the path and query. Geo HEAD has
+  an empty body and POST returns 405. All six pinned SRI resources verified.
+- Cloudflare **Always Use HTTPS** is enabled by the owner and verified live.
+  The owner restored **Full** TLS after **Full (strict)** produced a 526 error.
+  GitHub's Pages API still reports no domain certificate, and a direct TLS
+  check against the GitHub origin found a hostname mismatch. Do not enable
+  strict mode until the domain certificate is provisioned and verified.
+- The route's `request_limit_fail_open` setting is **true**, verified through
+  the Cloudflare API. If the Worker request quota is exhausted, the static
+  origin remains available, but Worker-added headers and geo handling are
+  bypassed. The independent Always Use HTTPS setting remains applicable.
+  The Workers subscription/quota could not be read with the OAuth scope;
+  no subscription was purchased or changed. Recheck the route's failure mode
+  after future deployments. This Worker does not enforce authentication.
+- Wrangler's OAuth grant permits Worker deployment but not zone settings or
+  DNS inspection. The origin certificate/DNS investigation remains unfinished.
+  Browser interaction was tested locally before deployment; live visual
+  retesting was unavailable because Chrome automation failed and Computer Use
+  does not support URL-policy enforcement for this Firefox session.
+
+### DNS correction identified; not yet applied
+
+The owner's Cloudflare screenshot shows the four correct GitHub Pages apex A
+records plus eight records using Cloudflare edge IPs as origin addresses:
+`104.21.78.46`, `172.67.216.148`, `2606:4700:3036::ac43:d894`, and
+`2606:4700:3035::6815:4e2e`, each on both the apex and `www`. These are invalid
+origin targets for the proxied site. The proposed correction is to remove only
+those eight records and add a proxied `www` CNAME to `qjoke.github.io`, retaining
+the four GitHub A records and every MX/TXT record. The owner has been notified
+of the proposed removals. No DNS changes have been made by this agent.
+
+Keep the orange proxy enabled and TLS on Full during this correction. Recheck
+both hostnames and GitHub certificate provisioning afterwards. Do not promise
+that correcting these records alone will resolve certificate issuance or
+switch to strict mode without a successful origin certificate check.
 
 ## Route and origin
 
@@ -85,7 +129,7 @@ policies, conditional responses, and redacted failures. They mock origin fetches
 and do not contact or deploy to Cloudflare. A static Python preview alone cannot
 verify response headers; test through a local Worker-compatible preview too.
 
-## Production rollout, after publication approval
+## Rollout and redeployment
 
 1. Review/deploy the corresponding static HTML/JavaScript changes first and
    confirm that CDN integrity checks pass, poster fallbacks work, and there are
@@ -132,8 +176,9 @@ Never add an EmailJS private key to static HTML or JavaScript.
 
 Account access controls, Cloudflare/GitHub/EmailJS MFA, DNS ownership, origin
 TLS mode, email template behavior and downloaded APK/EXE signing are outside
-what a public static-site/source audit can establish. No account settings,
-form deliveries, binary downloads or production deployments were changed here.
+what a public static-site/source audit can establish. The deployment status
+above records the subsequent production work. No real form deliveries or
+binary-download/signature tests were performed.
 
 References: [Cloudflare Worker Routes](https://developers.cloudflare.com/workers/configuration/routing/routes/),
 [Cloudflare origin proxy example](https://developers.cloudflare.com/workers/examples/modify-response/),
